@@ -22,21 +22,41 @@ namespace HotelBookingSystem
 
         private void btnManageRooms_Click(object sender, EventArgs e)
         {
-            var manageRoomsForm = new ManageRoomsForm(hotelManager);
-            manageRoomsForm.Show();
+            try
+            {
+                var manageRoomsForm = new ManageRoomsForm(hotelManager);
+                manageRoomsForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening manage rooms form: " + ex.Message);
+            }
         }
 
         private void btnManageGuests_Click(object sender, EventArgs e)
         {
-            var manageGuestsForm = new ManageGuestsForm(hotelManager);
-            manageGuestsForm.Show();
+            try
+            {
+                var manageGuestsForm = new ManageGuestsForm(hotelManager);
+                manageGuestsForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening manage guests form: " + ex.Message);
+            }
         }
 
         private void btnMakeBooking_Click(object sender, EventArgs e)
         {
-            var bookingForm = new BookingForm(hotelManager);
-            bookingForm.Show();
+            try
+            {
+                var bookingForm = new BookingForm(hotelManager);
+                bookingForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening booking form: " + ex.Message);
+            }
         }
     }
-
 }

@@ -15,8 +15,6 @@ namespace HotelBookingSystem
 
     public class Booking
     {
-        private int v;
-
         public int BookingID { get; private set; }
         public DateTime CheckInDate { get; private set; }
         public DateTime CheckOutDate { get; private set; }
@@ -34,103 +32,63 @@ namespace HotelBookingSystem
             PaymentStatus = paymentStatus;
         }
 
-        public Booking(int v, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate)
+        // Constructor for bookings without a specified payment status
+        public Booking(int bookingID, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate)
+            : this(bookingID, room, guest, checkInDate, checkOutDate, PaymentStatus.Pending)
         {
-            this.v = v;
-            Room = room;
-            Guest = guest;
-            CheckInDate = checkInDate;
-            CheckOutDate = checkOutDate;
-        }
-
-        public int GetBookingID()
-        {
-            return BookingID;
-        }
-
-        public void SetBookingID(int bookingID)
-        {
-            BookingID = bookingID;
-        }
-
-        public DateTime GetCheckInDate()
-        {
-            return CheckInDate;
-        }
-
-        public void SetCheckInDate(DateTime checkInDate)
-        {
-            CheckInDate = checkInDate;
-        }
-
-        public DateTime GetCheckOutDate()
-        {
-            return CheckOutDate;
-        }
-
-        public void SetCheckOutDate(DateTime checkOutDate)
-        {
-            CheckOutDate = checkOutDate;
-        }
-
-        public Guest GetGuest()
-        {
-            return Guest;
-        }
-
-        public void SetGuest(Guest guest)
-        {
-            Guest = guest;
-        }
-
-        public Room GetRoom()
-        {
-            return Room;
-        }
-
-        public void SetRoom(Room room)
-        {
-            Room = room;
-        }
-
-        public PaymentStatus GetPaymentStatus()
-        {
-            return PaymentStatus;
-        }
-
-        public void SetPaymentStatus(PaymentStatus paymentStatus)
-        {
-            PaymentStatus = paymentStatus;
         }
 
         public decimal CalculateTotalPrice()
         {
-            return Room.Price * GetStayDuration();
+            if (Room == null)
+            {
+                throw new InvalidOperationException("Room object is null.");
+            }
+
+            int stayDuration = GetStayDuration();
+            if (stayDuration <= 0)
+            {
+                throw new InvalidOperationException("Invalid stay duration.");
+            }
+
+            return Room.Price * stayDuration;
         }
 
         public bool ConfirmBooking()
         {
-            if (PaymentStatus == PaymentStatus.Pending)
+            if (PaymentStatus != PaymentStatus.Pending)
             {
-                PaymentStatus = PaymentStatus.Paid;
-                return true;
+                throw new InvalidOperationException("Booking cannot be confirmed because it is not pending.");
             }
-            return false;
+
+            PaymentStatus = PaymentStatus.Paid;
+            return true;
         }
 
         public bool CancelBooking()
         {
-            if (PaymentStatus == PaymentStatus.Pending || PaymentStatus == PaymentStatus.Paid)
+            if (PaymentStatus != PaymentStatus.Pending && PaymentStatus != PaymentStatus.Paid)
             {
-                PaymentStatus = PaymentStatus.Canceled;
-                return true;
+                throw new InvalidOperationException("Booking cannot be canceled because it is not pending or paid.");
             }
-            return false;
+
+            PaymentStatus = PaymentStatus.Canceled;
+            return true;
         }
 
         private int GetStayDuration()
         {
+            if (CheckOutDate < CheckInDate)
+            {
+                throw new InvalidOperationException("Check-out date cannot be before check-in date.");
+            }
+
             return (CheckOutDate - CheckInDate).Days;
+        }
+
+        internal int GetBookingID()
+        {
+            throw new NotImplementedException();
         }
     }
 }

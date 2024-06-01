@@ -28,6 +28,9 @@ namespace HotelBookingSystem
 
         public HotelManager()
         {
+            Rooms = new List<Room>();
+            Guests = new List<Guest>();
+            Bookings = new List<Booking>();
         }
 
         public string GetName()
@@ -37,6 +40,10 @@ namespace HotelBookingSystem
 
         public void SetName(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty.");
+            }
             this.name = name;
         }
 
@@ -47,6 +54,10 @@ namespace HotelBookingSystem
 
         public void SetLocation(string location)
         {
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                throw new ArgumentException("Location cannot be null or empty.");
+            }
             this.location = location;
         }
 
@@ -57,11 +68,19 @@ namespace HotelBookingSystem
 
         public void SetTotalRooms(int totalRooms)
         {
+            if (totalRooms <= 0)
+            {
+                throw new ArgumentException("Total rooms must be greater than zero.");
+            }
             this.totalRooms = totalRooms;
         }
 
         public void AddRoom(Room room)
         {
+            if (room == null)
+            {
+                throw new ArgumentNullException(nameof(room), "Room cannot be null.");
+            }
             Rooms.Add(room);
         }
 
@@ -76,6 +95,10 @@ namespace HotelBookingSystem
 
         public void AddGuest(Guest guest)
         {
+            if (guest == null)
+            {
+                throw new ArgumentNullException(nameof(guest), "Guest cannot be null.");
+            }
             Guests.Add(guest);
         }
 
@@ -90,6 +113,10 @@ namespace HotelBookingSystem
 
         public void MakeBooking(Booking booking)
         {
+            if (booking == null)
+            {
+                throw new ArgumentNullException(nameof(booking), "Booking cannot be null.");
+            }
             Bookings.Add(booking);
             booking.Room.SetAvailability(false);
         }

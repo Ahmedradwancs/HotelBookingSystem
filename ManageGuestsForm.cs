@@ -28,17 +28,26 @@ namespace HotelBookingSystem
 
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
-            var guest = new Guest(
-                int.Parse(txtGuestID.Text),
-                txtName.Text,
-                txtContactInfo.Text,
-                dtpCheckInDate.Value,
-                dtpCheckOutDate.Value
-            );
+            try
+            {
+                var guest = new Guest(
+                    int.Parse(txtGuestID.Text),
+                    txtName.Text,
+                    txtContactInfo.Text
+                );
 
-            guests.Add(guest);
-            lstGuests.Items.Add(guest);
-            ClearGuestInputFields();
+                guests.Add(guest);
+                lstGuests.Items.Add(guest);
+                ClearGuestInputFields();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Invalid guest ID format. Please enter a valid integer value.");
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Error adding guest: {ex.Message}");
+            }
         }
 
         private void btnRemoveGuest_Click(object sender, EventArgs e)
@@ -52,16 +61,21 @@ namespace HotelBookingSystem
 
         private void btnUpdateGuest_Click(object sender, EventArgs e)
         {
-            if (lstGuests.SelectedItem is Guest selectedGuest)
+            try
             {
-                selectedGuest.UpdateGuest(
-                    txtName.Text,
-                    txtContactInfo.Text,
-                    dtpCheckInDate.Value,
-                    dtpCheckOutDate.Value
-                );
-                lstGuests.Items[lstGuests.SelectedIndex] = selectedGuest;  // Refresh the listbox
-                ClearGuestInputFields();
+                if (lstGuests.SelectedItem is Guest selectedGuest)
+                {
+                    selectedGuest.UpdateGuest(
+                        txtName.Text,
+                        txtContactInfo.Text
+                    );
+                    lstGuests.Items[lstGuests.SelectedIndex] = selectedGuest;  // Refresh the listbox
+                    ClearGuestInputFields();
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Error updating guest: {ex.Message}");
             }
         }
 
@@ -70,9 +84,6 @@ namespace HotelBookingSystem
             txtGuestID.Clear();
             txtName.Clear();
             txtContactInfo.Clear();
-            dtpCheckInDate.Value = DateTime.Now;
-            dtpCheckOutDate.Value = DateTime.Now;
         }
     }
-
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HotelBookingSystem
-{   
+{
     public enum RoomType
     {
         Single,
@@ -21,7 +21,6 @@ namespace HotelBookingSystem
         public bool IsAvailable { get; private set; }
         public decimal Price { get; private set; }
         public int Capacity { get; private set; }
-        public object RoomType { get; internal set; }
 
         public Room(int roomNumber, RoomType type, bool isAvailable, decimal price, int capacity)
         {
@@ -35,7 +34,7 @@ namespace HotelBookingSystem
         public Room(int roomNumber, string roomType, decimal price, bool isAvailable)
         {
             RoomNumber = roomNumber;
-            RoomType = roomType;
+            SetRoomType(roomType); // Set RoomType instead of RoomType property directly
             Price = price;
             IsAvailable = isAvailable;
         }
@@ -50,7 +49,24 @@ namespace HotelBookingSystem
             RoomNumber = roomNumber;
         }
 
-        public RoomType Type1 { get => Type; set => Type = value; }
+        public RoomType GetRoomType()
+        {
+            return Type;
+        }
+
+        public void SetRoomType(RoomType type)
+        {
+            Type = type;
+        }
+
+        public void SetRoomType(string roomType)
+        {
+            if (!Enum.TryParse(roomType, out RoomType type))
+            {
+                throw new ArgumentException("Invalid room type.");
+            }
+            Type = type;
+        }
 
         public bool GetAvailability()
         {

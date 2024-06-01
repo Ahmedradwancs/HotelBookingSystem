@@ -34,9 +34,13 @@ namespace HotelBookingSystem
                 hotelManager.AddRoom(room);
                 UpdateRoomList();
             }
-            catch (Exception ex)
+            catch (FormatException)
             {
-                MessageBox.Show("Error adding room: " + ex.Message);
+                MessageBox.Show("Invalid room number or price format. Please enter valid numeric values.");
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Error adding room: {ex.Message}");
             }
         }
 
@@ -49,6 +53,4 @@ namespace HotelBookingSystem
             }
         }
     }
-
-
 }

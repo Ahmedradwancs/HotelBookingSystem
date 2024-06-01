@@ -8,7 +8,7 @@ namespace HotelBookingSystem
         public string Name { get; private set; }
         public string ContactInfo { get; private set; }
 
-        public Guest(int guestID, string name, string contactInfo, System.DateTime value, System.DateTime value1)
+        public Guest(int guestID, string name, string contactInfo)
         {
             GuestID = guestID;
             Name = name;
@@ -22,6 +22,10 @@ namespace HotelBookingSystem
 
         public void SetName(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty.");
+            }
             Name = name;
         }
 
@@ -32,6 +36,10 @@ namespace HotelBookingSystem
 
         public void SetContactInfo(string contactInfo)
         {
+            if (string.IsNullOrWhiteSpace(contactInfo))
+            {
+                throw new ArgumentException("Contact information cannot be null or empty.");
+            }
             ContactInfo = contactInfo;
         }
 
@@ -40,9 +48,10 @@ namespace HotelBookingSystem
             return $"{Name} (ID: {GuestID})";
         }
 
-        internal void UpdateGuest(string text1, string text2, DateTime value1, DateTime value2)
+        public void UpdateGuest(string name, string contactInfo)
         {
-            throw new NotImplementedException();
+            SetName(name);
+            SetContactInfo(contactInfo);
         }
     }
 }

@@ -26,18 +26,32 @@ namespace HotelBookingSystem
         private void LoadAvailableRooms()
         {
             cmbRoom.Items.Clear();
-            foreach (var room in hotelManager.GetAvailableRooms())
+            try
             {
-                cmbRoom.Items.Add($"{room.RoomNumber} - {room.RoomType}");
+                foreach (var room in hotelManager.GetAvailableRooms())
+                {
+                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.RoomType}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading available rooms: " + ex.Message);
             }
         }
 
         private void LoadGuests()
         {
             cmbGuest.Items.Clear();
-            foreach (var guest in hotelManager.Guests)
+            try
             {
-                cmbGuest.Items.Add($"{guest.GuestID} - {guest.Name}");
+                foreach (var guest in hotelManager.Guests)
+                {
+                    cmbGuest.Items.Add($"{guest.GuestID} - {guest.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading guests: " + ex.Message);
             }
         }
 
@@ -89,12 +103,17 @@ namespace HotelBookingSystem
         private void UpdateBookingList()
         {
             lstBookings.Items.Clear();
-            foreach (var booking in hotelManager.Bookings)
+            try
             {
-                lstBookings.Items.Add($"{booking.BookingID} - Room {booking.Room.RoomNumber} - Guest {booking.Guest.Name}");
+                foreach (var booking in hotelManager.Bookings)
+                {
+                    lstBookings.Items.Add($"{booking.BookingID} - Room {booking.Room.RoomNumber} - Guest {booking.Guest.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating booking list: " + ex.Message);
             }
         }
     }
-
-
 }
