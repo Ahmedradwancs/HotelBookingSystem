@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelBookingSystem
 {
@@ -11,35 +7,42 @@ namespace HotelBookingSystem
         public int GuestID { get; private set; }
         public string Name { get; private set; }
         public string ContactInfo { get; private set; }
-        public DateTime CheckInDate { get; private set; }
-        public DateTime CheckOutDate { get; private set; }
 
-        public Guest(int guestID, string name, string contactInfo, DateTime checkInDate, DateTime checkOutDate)
+        public Guest(int guestID, string name, string contactInfo, System.DateTime value, System.DateTime value1)
         {
             GuestID = guestID;
             Name = name;
             ContactInfo = contactInfo;
-            CheckInDate = checkInDate;
-            CheckOutDate = checkOutDate;
         }
 
-        public void UpdateGuest(string name, string contactInfo, DateTime checkInDate, DateTime checkOutDate)
+        public string GetName()
+        {
+            return Name;
+        }
+
+        public void SetName(string name)
         {
             Name = name;
-            ContactInfo = contactInfo;
-            CheckInDate = checkInDate;
-            CheckOutDate = checkOutDate;
         }
 
-        public int GetStayDuration()
+        public string GetContactInfo()
         {
-            return (CheckOutDate - CheckInDate).Days;
+            return ContactInfo;
+        }
+
+        public void SetContactInfo(string contactInfo)
+        {
+            ContactInfo = contactInfo;
         }
 
         public override string ToString()
         {
             return $"{Name} (ID: {GuestID})";
         }
-    }
 
+        internal void UpdateGuest(string text1, string text2, DateTime value1, DateTime value2)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

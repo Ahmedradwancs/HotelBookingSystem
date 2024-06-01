@@ -14,10 +14,16 @@ namespace HotelBookingSystem
     public partial class ManageGuestsForm : Form
     {
         private List<Guest> guests = new List<Guest>();
+        private HotelManager hotelManager;
 
         public ManageGuestsForm()
         {
             InitializeComponent();
+        }
+
+        public ManageGuestsForm(HotelManager hotelManager)
+        {
+            this.hotelManager = hotelManager;
         }
 
         private void btnAddGuest_Click(object sender, EventArgs e)
