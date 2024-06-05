@@ -49,7 +49,7 @@ namespace HotelBookingSystem
             lstRooms.Items.Clear();
             foreach (var room in hotelManager.Rooms)
             {
-                lstRooms.Items.Add($"{room.RoomNumber} - {room.RoomType}");
+                lstRooms.Items.Add($"{room.RoomNumber} - {room.Type}");
             }
         }
     }

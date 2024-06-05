@@ -6,13 +6,15 @@ namespace HotelBookingSystem
     {
         public int GuestID { get; private set; }
         public string Name { get; private set; }
-        public string ContactInfo { get; private set; }
+        public string Phone { get; private set; }
+        public string Email { get; private set; }
 
-        public Guest(int guestID, string name, string contactInfo)
+        public Guest(int guestID, string name, string phone, string email)
         {
             GuestID = guestID;
-            Name = name;
-            ContactInfo = contactInfo;
+            SetName(name);
+            SetPhone(phone);
+            SetEmail(email);
         }
 
         public string GetName()
@@ -29,18 +31,32 @@ namespace HotelBookingSystem
             Name = name;
         }
 
-        public string GetContactInfo()
+        public string GetPhone()
         {
-            return ContactInfo;
+            return Phone;
         }
 
-        public void SetContactInfo(string contactInfo)
+        public void SetPhone(string phone)
         {
-            if (string.IsNullOrWhiteSpace(contactInfo))
+            if (string.IsNullOrWhiteSpace(phone))
             {
-                throw new ArgumentException("Contact information cannot be null or empty.");
+                throw new ArgumentException("Phone cannot be null or empty.");
             }
-            ContactInfo = contactInfo;
+            Phone = phone;
+        }
+
+        public string GetEmail()
+        {
+            return Email;
+        }
+
+        public void SetEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email cannot be null or empty.");
+            }
+            Email = email;
         }
 
         public override string ToString()
@@ -48,10 +64,22 @@ namespace HotelBookingSystem
             return $"{Name} (ID: {GuestID})";
         }
 
-        public void UpdateGuest(string name, string contactInfo)
+        public void UpdateGuest(string name, string phone, string email)
         {
             SetName(name);
-            SetContactInfo(contactInfo);
+            SetPhone(phone);
+            SetEmail(email);
+        }
+
+        public string GetContactInfo()
+        {
+            return $"{Phone}, {Email}";
+        }
+
+        public void SetContactInfo(string phone, string email)
+        {
+            SetPhone(phone);
+            SetEmail(email);
         }
     }
 }

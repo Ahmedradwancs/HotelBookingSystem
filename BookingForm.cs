@@ -30,7 +30,7 @@ namespace HotelBookingSystem
             {
                 foreach (var room in hotelManager.GetAvailableRooms())
                 {
-                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.RoomType}");
+                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.Type}");
                 }
             }
             catch (Exception ex)
