@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -16,11 +17,11 @@ namespace HotelBookingSystem
             LoadGuests();
             UpdateBookingList();
             SetDefaultCheckoutDate();
+            LoadBookingsFromFile();
 
             // Subscribe to the SelectedIndexChanged event of cmbGuest
             cmbGuest.SelectedIndexChanged += cmbGuest_SelectedIndexChanged;
         }
-
 
         private void cmbGuest_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -45,7 +46,6 @@ namespace HotelBookingSystem
                 MessageBox.Show($"Error updating guest name: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void LoadAvailableRooms()
         {
@@ -161,6 +161,48 @@ namespace HotelBookingSystem
             }
         }
 
+        private void LoadBookingsFromFile()
+        {
+            try
+            {
+                if (File.Exists("bookings.txt"))
+                {
+                    hotelManager.Bookings.Clear();
+                    string[] lines = File.ReadAllLines("bookings.txt");
+                    foreach (string line in lines)
+                    {
+                        string[] parts = line.Split('|');
+                        if (parts.Length == 5)
+                        {
+                            int bookingID = int.Parse(parts[0]);
+                            int roomNumber = int.Parse(parts[1]);
+                            int guestID = int.Parse(parts[2]);
+                            DateTime checkInDate = DateTime.Parse(parts[3]);
+                            DateTime checkOutDate = DateTime.Parse(parts[4]);
+
+                            var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                            var guest = hotelManager.Guests.FirstOrDefault(g => g.GuestID == guestID);
+
+                            if (room != null && guest != null)
+                            {
+                                var booking = new Booking(bookingID, room, guest, checkInDate, checkOutDate);
+                                hotelManager.Bookings.Add(booking);
+                            }
+                        }
+                    }
+                    MessageBox.Show("Bookings loaded successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("No existing bookings file found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading bookings from file: {ex.Message}");
+            }
+        }
+
         private void UpdateBookingList()
         {
             lstBookings.Items.Clear();
@@ -170,7 +212,14 @@ namespace HotelBookingSystem
                 {
                     int nights = (booking.CheckOutDate - booking.CheckInDate).Days;
                     decimal totalPrice = booking.CalculateTotalPrice();
-                    lstBookings.Items.Add($"{booking.BookingID} - Room {booking.Room.RoomNumber} - Guest {booking.Guest.Name} - Check-in: {booking.CheckInDate:yyyy-MM-dd} - Check-out: {booking.CheckOutDate:yyyy-MM-dd} - Nights: {nights} - Total Price: {totalPrice:C}");
+                    string bookingDetails = $"Booking ID: {booking.BookingID} - " +
+                                            $"Room Number: {booking.Room.RoomNumber} - " +
+                                            $"Guest: {booking.Guest.Name} - " +
+                                            $"Check-in Date: {booking.CheckInDate:yyyy-MM-dd} - " +
+                                            $"Check-out Date: {booking.CheckOutDate:yyyy-MM-dd} - " +
+                                            $"Nights: {nights} - " +
+                                            $"Total Price: {totalPrice:C}";
+                    lstBookings.Items.Add(bookingDetails);
                 }
             }
             catch (Exception ex)

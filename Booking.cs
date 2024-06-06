@@ -2,19 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace HotelBookingSystem
 {
-    public enum PaymentStatus
-    {
-        Pending,
-        Paid,
-        Canceled
-    }
-
     public class Booking
     {
         public int BookingID { get; private set; }
@@ -22,19 +12,17 @@ namespace HotelBookingSystem
         public DateTime CheckOutDate { get; private set; }
         public Guest Guest { get; private set; }
         public Room Room { get; private set; }
-        public PaymentStatus PaymentStatus { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Booking"/> class.
         /// </summary>
-        public Booking(int bookingID, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate, PaymentStatus paymentStatus = PaymentStatus.Pending)
+        public Booking(int bookingID, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate)
         {
             BookingID = bookingID;
             Room = room;
             Guest = guest;
             CheckInDate = checkInDate;
             CheckOutDate = checkOutDate;
-            PaymentStatus = paymentStatus;
         }
 
         /// <summary>
@@ -53,28 +41,6 @@ namespace HotelBookingSystem
         }
 
         /// <summary>
-        /// Confirms the booking by updating its payment status.
-        /// </summary>
-        public void ConfirmBooking()
-        {
-            if (PaymentStatus != PaymentStatus.Pending)
-                throw new InvalidOperationException("Booking cannot be confirmed because it is not pending.");
-
-            PaymentStatus = PaymentStatus.Paid;
-        }
-
-        /// <summary>
-        /// Cancels the booking by updating its payment status.
-        /// </summary>
-        public void CancelBooking()
-        {
-            if (PaymentStatus != PaymentStatus.Pending && PaymentStatus != PaymentStatus.Paid)
-                throw new InvalidOperationException("Booking cannot be canceled because it is not pending or paid.");
-
-            PaymentStatus = PaymentStatus.Canceled;
-        }
-
-        /// <summary>
         /// Gets the stay duration of the booking.
         /// </summary>
         private int GetStayDuration()
@@ -85,6 +51,38 @@ namespace HotelBookingSystem
             return (CheckOutDate - CheckInDate).Days;
         }
 
+        public override string ToString()
+        {
+            return $"{BookingID}|{Room.RoomNumber}|{Guest.GuestID}|{CheckInDate:yyyy-MM-dd}|{CheckOutDate:yyyy-MM-dd}|{Guest.Name}|{Room.Price}";
+        }
+
+        /// <summary>
+        /// Converts a string to a Booking instance.
+        /// </summary>
+        public static Booking FromString(string bookingString, List<Room> rooms, List<Guest> guests)
+        {
+            var parts = bookingString.Split('|');
+            if (parts.Length == 7)
+            {
+                int bookingID = int.Parse(parts[0]);
+                int roomNumber = int.Parse(parts[1]);
+                int guestID = int.Parse(parts[2]);
+                DateTime checkInDate = DateTime.Parse(parts[3]);
+                DateTime checkOutDate = DateTime.Parse(parts[4]);
+                string guestName = parts[5];
+                decimal roomPrice = decimal.Parse(parts[6]);
+
+                var room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                var guest = guests.FirstOrDefault(g => g.GuestID == guestID);
+
+                if (room != null && guest != null)
+                {
+                    return new Booking(bookingID, room, guest, checkInDate, checkOutDate);
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Saves the list of bookings to a file.
         /// </summary>
@@ -92,13 +90,8 @@ namespace HotelBookingSystem
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    foreach (var booking in bookings)
-                    {
-                        writer.WriteLine($"{booking.BookingID}|{booking.Guest.GuestID}|{booking.CheckInDate:yyyy-MM-dd}|{booking.CheckOutDate:yyyy-MM-dd}|{booking.PaymentStatus}");
-                    }
-                }
+                var lines = bookings.Select(b => b.ToString()).ToArray();
+                File.WriteAllLines(filePath, lines);
             }
             catch (IOException ex)
             {
@@ -117,30 +110,13 @@ namespace HotelBookingSystem
             {
                 if (File.Exists(filePath))
                 {
-                    using (StreamReader reader = new StreamReader(filePath))
+                    string[] lines = File.ReadAllLines(filePath);
+                    foreach (string line in lines)
                     {
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
+                        var booking = FromString(line, rooms, guests);
+                        if (booking != null)
                         {
-                            var parts = line.Split('|');
-                            if (parts.Length == 6)
-                            {
-                                int bookingID = int.Parse(parts[0]);
-                                int roomNumber = int.Parse(parts[1]);
-                                int guestID = int.Parse(parts[2]);
-                                DateTime checkInDate = DateTime.Parse(parts[3]);
-                                DateTime checkOutDate = DateTime.Parse(parts[4]);
-                                PaymentStatus paymentStatus = (PaymentStatus)Enum.Parse(typeof(PaymentStatus), parts[5]);
-
-                                var room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-                                var guest = guests.FirstOrDefault(g => g.GuestID == guestID);
-
-                                if (room != null && guest != null)
-                                {
-                                    var booking = new Booking(bookingID, room, guest, checkInDate, checkOutDate, paymentStatus);
-                                    bookings.Add(booking);
-                                }
-                            }
+                            bookings.Add(booking);
                         }
                     }
                 }
