@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,128 +13,83 @@ namespace HotelBookingSystem
         public List<Guest> Guests { get; private set; }
         public List<Booking> Bookings { get; private set; }
 
-        private string name;
-        private string location;
-        private int totalRooms;
-
-        public HotelManager(string name, string location, int totalRooms)
-        {
-            this.name = name;
-            this.location = location;
-            this.totalRooms = totalRooms;
-            Rooms = new List<Room>();
-            Guests = new List<Guest>();
-            Bookings = new List<Booking>();
-        }
-
         public HotelManager()
         {
             Rooms = new List<Room>();
             Guests = new List<Guest>();
             Bookings = new List<Booking>();
+            InitializeRooms();
+            LoadGuestsFromFile("guests.txt");
         }
 
-        public string GetName()
+        // Initialize rooms
+        private void InitializeRooms()
         {
-            return name;
+            Rooms.Add(new Room(101, RoomType.Single, true));
+            Rooms.Add(new Room(102, RoomType.Single, true));
+            Rooms.Add(new Room(201, RoomType.Double, true));
+            Rooms.Add(new Room(202, RoomType.Double, true));
+            Rooms.Add(new Room(301, RoomType.Suite, true));
         }
 
-        public void SetName(string name)
+        // Get available rooms
+        public IEnumerable<Room> GetAvailableRooms()
         {
-            if (string.IsNullOrWhiteSpace(name))
+            return Rooms.Where(room => room.IsAvailable);
+        }
+
+        // Get guests from guests.
+        // Inside HotelManager class
+        public void LoadGuestsFromFile(string filePath)
+        {
+            try
             {
-                throw new ArgumentException("Name cannot be null or empty.");
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 4)
+                            {
+                                var guest = new Guest(int.Parse(parts[0]), parts[1], parts[2], parts[3]);
+                                Guests.Add(guest);
+                            }
+                        }
+                    }
+                    Console.WriteLine("Guests loaded successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("No existing guests file found.");
+                }
             }
-            this.name = name;
-        }
-
-        public string GetLocation()
-        {
-            return location;
-        }
-
-        public void SetLocation(string location)
-        {
-            if (string.IsNullOrWhiteSpace(location))
+            catch (Exception ex)
             {
-                throw new ArgumentException("Location cannot be null or empty.");
-            }
-            this.location = location;
-        }
-
-        public int GetTotalRooms()
-        {
-            return totalRooms;
-        }
-
-        public void SetTotalRooms(int totalRooms)
-        {
-            if (totalRooms <= 0)
-            {
-                throw new ArgumentException("Total rooms must be greater than zero.");
-            }
-            this.totalRooms = totalRooms;
-        }
-
-        public void AddRoom(Room room)
-        {
-            if (room == null)
-            {
-                throw new ArgumentNullException(nameof(room), "Room cannot be null.");
-            }
-            Rooms.Add(room);
-        }
-
-        public void RemoveRoom(int roomNumber)
-        {
-            var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-            if (room != null)
-            {
-                Rooms.Remove(room);
+                Console.WriteLine($"Error loading guests from file: {ex.Message}");
             }
         }
 
-        public void AddGuest(Guest guest)
-        {
-            if (guest == null)
-            {
-                throw new ArgumentNullException(nameof(guest), "Guest cannot be null.");
-            }
-            Guests.Add(guest);
-        }
 
-        public void RemoveGuest(string name)
-        {
-            var guest = Guests.FirstOrDefault(g => g.GetName() == name);
-            if (guest != null)
-            {
-                Guests.Remove(guest);
-            }
-        }
-
+        // Make booking
         public void MakeBooking(Booking booking)
         {
-            if (booking == null)
-            {
-                throw new ArgumentNullException(nameof(booking), "Booking cannot be null.");
-            }
             Bookings.Add(booking);
-            booking.Room.SetAvailability(false);
+            booking.Room.ToggleAvailability(); // Mark the room as unavailable
         }
 
-        public void CancelBooking(int bookingID)
+        // Cancel booking
+        public void CancelBooking(int bookingId)
         {
-            var booking = Bookings.FirstOrDefault(b => b.GetBookingID() == bookingID);
+            var booking = Bookings.FirstOrDefault(b => b.BookingID == bookingId);
             if (booking != null)
             {
-                booking.Room.SetAvailability(true);
                 Bookings.Remove(booking);
+                booking.Room.ToggleAvailability(); // Mark the room as available
             }
         }
 
-        public List<Room> GetAvailableRooms()
-        {
-            return Rooms.Where(r => r.IsAvailable).ToList();
-        }
     }
 }

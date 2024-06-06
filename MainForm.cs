@@ -20,18 +20,6 @@ namespace HotelBookingSystem
             hotelManager = new HotelManager();
         }
 
-        private void btnManageRooms_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var manageRoomsForm = new ManageRoomsForm(hotelManager);
-                manageRoomsForm.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening manage rooms form: " + ex.Message);
-            }
-        }
 
         private void btnManageGuests_Click(object sender, EventArgs e)
         {

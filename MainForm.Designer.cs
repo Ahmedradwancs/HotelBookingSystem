@@ -34,17 +34,14 @@ namespace HotelBookingSystem
             // 
             // btnManageRooms
             // 
-            this.btnManageRooms.Location = new System.Drawing.Point(151, 97);
+            this.btnManageRooms.Location = new System.Drawing.Point(0, 0);
             this.btnManageRooms.Name = "btnManageRooms";
-            this.btnManageRooms.Size = new System.Drawing.Size(200, 98);
+            this.btnManageRooms.Size = new System.Drawing.Size(75, 23);
             this.btnManageRooms.TabIndex = 0;
-            this.btnManageRooms.Text = "Manage Rooms";
-            this.btnManageRooms.UseVisualStyleBackColor = true;
-            this.btnManageRooms.Click += new System.EventHandler(this.btnManageRooms_Click);
             // 
             // btnManageGuests
             // 
-            this.btnManageGuests.Location = new System.Drawing.Point(151, 224);
+            this.btnManageGuests.Location = new System.Drawing.Point(151, 246);
             this.btnManageGuests.Name = "btnManageGuests";
             this.btnManageGuests.Size = new System.Drawing.Size(200, 98);
             this.btnManageGuests.TabIndex = 1;
@@ -54,7 +51,7 @@ namespace HotelBookingSystem
             // 
             // btnMakeBooking
             // 
-            this.btnMakeBooking.Location = new System.Drawing.Point(151, 352);
+            this.btnMakeBooking.Location = new System.Drawing.Point(151, 78);
             this.btnMakeBooking.Name = "btnMakeBooking";
             this.btnMakeBooking.Size = new System.Drawing.Size(200, 98);
             this.btnMakeBooking.TabIndex = 2;

@@ -122,6 +122,24 @@ namespace HotelBookingSystem
                 MessageBox.Show($"Error saving guests to file: {ex.Message}");
             }
         }
+        public Guest GetCreatedGuest()
+        {
+            if (string.IsNullOrWhiteSpace(txtName.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                string.IsNullOrWhiteSpace(txtPhone.Text))
+            {
+                MessageBox.Show("Please fill in all fields.");
+                return null;
+            }
+
+            return new Guest(
+                guests.Count + 1,
+                txtName.Text,
+                txtPhone.Text,
+                txtEmail.Text
+            );
+        }
+
 
         private void LoadGuestsFromFile()
         {
