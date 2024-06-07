@@ -79,12 +79,12 @@ namespace HotelBookingSystem
             }
         }
 
-
         private void CalculatePrice()
         {
             if (cmbRoom.SelectedItem != null)
             {
-                int roomNumber = int.Parse(cmbRoom.SelectedItem.ToString().Split(' ')[1]);
+                var selectedRoom = cmbRoom.SelectedItem.ToString();
+                int roomNumber = int.Parse(selectedRoom.Split(' ')[1]);
                 var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
 
                 if (room != null)
@@ -101,12 +101,6 @@ namespace HotelBookingSystem
                     }
                 }
             }
-        }
-
-
-        private void SetDefaultCheckoutDate()
-        {
-            dtpCheckOutDate.Value = dtpCheckInDate.Value.AddDays(1);
         }
 
         private void btnMakeBooking_Click(object sender, EventArgs e)
@@ -133,9 +127,10 @@ namespace HotelBookingSystem
                     {
                         var booking = new Booking(hotelManager.Bookings.Count + 1, room, guest, checkInDate, checkOutDate, guest.GetName(), room.Price);
                         hotelManager.MakeBooking(booking);
-                        UpdateBookingList();
+                        UpdateBookingList(); // Ensure booking list is updated
                         SaveBookingsToFile();
                         MessageBox.Show("Booking successfully made!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        UpdateBookingList(); // Update the booking list again after saving to file
                     }
                     else
                     {
@@ -153,7 +148,6 @@ namespace HotelBookingSystem
             }
             LoadAvailableRooms();
         }
-
 
         private void btnCancelBooking_Click(object sender, EventArgs e)
         {
@@ -264,6 +258,11 @@ namespace HotelBookingSystem
         private void dtpCheckInDate_ValueChanged(object sender, EventArgs e)
         {
             SetDefaultCheckoutDate();
+        }
+
+        private void SetDefaultCheckoutDate()
+        {
+            dtpCheckOutDate.Value = dtpCheckInDate.Value.AddDays(1);
             CalculatePrice();
         }
 
@@ -277,5 +276,14 @@ namespace HotelBookingSystem
             CalculatePrice();
         }
 
+        private void button9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

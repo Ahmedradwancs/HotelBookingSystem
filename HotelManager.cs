@@ -20,6 +20,7 @@ namespace HotelBookingSystem
             Bookings = new List<Booking>();
             InitializeRooms();
             LoadGuestsFromFile("guests.txt");
+            LoadRoomAvailabilityFromFile("room_availability.txt"); // Load room availability when the manager is created
         }
 
         // Initialize rooms
@@ -33,7 +34,6 @@ namespace HotelBookingSystem
             Rooms.Add(new Room(302, RoomType.Suite, true));
             Rooms.Add(new Room(401, RoomType.Other, true));
             Rooms.Add(new Room(402, RoomType.Other, true));
-
         }
 
         public List<Room> GetAvailableRooms()
@@ -75,12 +75,12 @@ namespace HotelBookingSystem
             }
         }
 
-
         // Make booking
         public void MakeBooking(Booking booking)
         {
             Bookings.Add(booking);
             booking.Room.IsAvailable = false;  // Mark the room as unavailable
+            SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after making a new booking
         }
 
         // Cancel booking
@@ -91,8 +91,58 @@ namespace HotelBookingSystem
             {
                 Bookings.Remove(booking);
                 booking.Room.IsAvailable = true;  // Mark the room as available
+                SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after canceling a booking
             }
         }
 
+        private void SaveRoomAvailabilityToFile(string filePath)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var room in Rooms)
+                    {
+                        writer.WriteLine($"{room.RoomNumber}|{room.IsAvailable}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving room availability to file: {ex.Message}");
+            }
+        }
+
+        private void LoadRoomAvailabilityFromFile(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                int roomNumber = int.Parse(parts[0]);
+                                bool isAvailable = bool.Parse(parts[1]);
+                                var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                                if (room != null)
+                                {
+                                    room.IsAvailable = isAvailable;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading room availability from file: {ex.Message}");
+            }
+        }
     }
 }
