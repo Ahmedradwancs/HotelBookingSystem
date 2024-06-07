@@ -13,16 +13,21 @@ namespace HotelBookingSystem
         public Guest Guest { get; private set; }
         public Room Room { get; private set; }
 
+        public string GuestName { get; private set; }
+        public decimal RoomPrice { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Booking"/> class.
         /// </summary>
-        public Booking(int bookingID, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate)
+        public Booking(int bookingID, Room room, Guest guest, DateTime checkInDate, DateTime checkOutDate, string guestName, decimal roomPrice)
         {
             BookingID = bookingID;
             Room = room;
             Guest = guest;
             CheckInDate = checkInDate;
             CheckOutDate = checkOutDate;
+            GuestName = guestName;
+            RoomPrice = roomPrice;
         }
 
         /// <summary>
@@ -56,9 +61,6 @@ namespace HotelBookingSystem
             return $"{BookingID}|{Room.RoomNumber}|{Guest.GuestID}|{CheckInDate:yyyy-MM-dd}|{CheckOutDate:yyyy-MM-dd}|{Guest.Name}|{Room.Price}";
         }
 
-        /// <summary>
-        /// Converts a string to a Booking instance.
-        /// </summary>
         public static Booking FromString(string bookingString, List<Room> rooms, List<Guest> guests)
         {
             var parts = bookingString.Split('|');
@@ -77,11 +79,12 @@ namespace HotelBookingSystem
 
                 if (room != null && guest != null)
                 {
-                    return new Booking(bookingID, room, guest, checkInDate, checkOutDate);
+                    return new Booking(bookingID, room, guest, checkInDate, checkOutDate, guestName, roomPrice);
                 }
             }
             return null;
         }
+
 
         /// <summary>
         /// Saves the list of bookings to a file.

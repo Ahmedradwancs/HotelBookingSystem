@@ -46,5 +46,15 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error opening booking form: " + ex.Message);
             }
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

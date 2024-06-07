@@ -30,16 +30,19 @@ namespace HotelBookingSystem
             Rooms.Add(new Room(201, RoomType.Double, true));
             Rooms.Add(new Room(202, RoomType.Double, true));
             Rooms.Add(new Room(301, RoomType.Suite, true));
+            Rooms.Add(new Room(302, RoomType.Suite, true));
+            Rooms.Add(new Room(401, RoomType.Other, true));
+            Rooms.Add(new Room(402, RoomType.Other, true));
+
         }
 
-        // Get available rooms
-        public IEnumerable<Room> GetAvailableRooms()
+        public List<Room> GetAvailableRooms()
         {
-            return Rooms.Where(room => room.IsAvailable);
+            // Ensure this method only returns rooms that are available
+            return Rooms.Where(room => room.IsAvailable).ToList();
         }
 
         // Get guests from guests.
-        // Inside HotelManager class
         public void LoadGuestsFromFile(string filePath)
         {
             try
@@ -77,7 +80,7 @@ namespace HotelBookingSystem
         public void MakeBooking(Booking booking)
         {
             Bookings.Add(booking);
-            booking.Room.ToggleAvailability(); // Mark the room as unavailable
+            booking.Room.IsAvailable = false;  // Mark the room as unavailable
         }
 
         // Cancel booking
@@ -87,7 +90,7 @@ namespace HotelBookingSystem
             if (booking != null)
             {
                 Bookings.Remove(booking);
-                booking.Room.ToggleAvailability(); // Mark the room as available
+                booking.Room.IsAvailable = true;  // Mark the room as available
             }
         }
 

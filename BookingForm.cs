@@ -13,14 +13,30 @@ namespace HotelBookingSystem
         {
             InitializeComponent();
             hotelManager = manager;
-            LoadAvailableRooms();
             LoadGuests();
+            LoadAvailableRooms();
             UpdateBookingList();
             SetDefaultCheckoutDate();
             LoadBookingsFromFile();
 
             // Subscribe to the SelectedIndexChanged event of cmbGuest
             cmbGuest.SelectedIndexChanged += cmbGuest_SelectedIndexChanged;
+        }
+
+        private void LoadGuests()
+        {
+            cmbGuest.Items.Clear();
+            try
+            {
+                foreach (var guest in hotelManager.Guests)
+                {
+                    cmbGuest.Items.Add($"{guest.GuestID} - {guest.GetName()}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading guests: " + ex.Message);
+            }
         }
 
         private void cmbGuest_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,7 +70,7 @@ namespace HotelBookingSystem
             {
                 foreach (var room in hotelManager.GetAvailableRooms())
                 {
-                    cmbRoom.Items.Add(room.ToString());
+                    cmbRoom.Items.Add(room);  // Add room objects directly
                 }
             }
             catch (Exception ex)
@@ -63,26 +79,6 @@ namespace HotelBookingSystem
             }
         }
 
-        private void LoadGuests()
-        {
-            cmbGuest.Items.Clear();
-            try
-            {
-                foreach (var guest in hotelManager.Guests)
-                {
-                    cmbGuest.Items.Add($"{guest.GuestID} - {guest.Name}");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading guests: " + ex.Message);
-            }
-        }
-
-        private void SetDefaultCheckoutDate()
-        {
-            dtpCheckOutDate.Value = dtpCheckInDate.Value.AddDays(1);
-        }
 
         private void CalculatePrice()
         {
@@ -94,10 +90,23 @@ namespace HotelBookingSystem
                 if (room != null)
                 {
                     int nights = (dtpCheckOutDate.Value - dtpCheckInDate.Value).Days;
-                    decimal totalPrice = room.Price * nights;
-                    money.Text = $"Total Price: {totalPrice:C}$";
+                    if (nights > 0) // Ensure the number of nights is positive
+                    {
+                        decimal totalPrice = room.Price * nights;
+                        lblMoney.Text = $"Total amount to pay: {totalPrice:C}$";
+                    }
+                    else
+                    {
+                        lblMoney.Text = "Invalid stay duration.";
+                    }
                 }
             }
+        }
+
+
+        private void SetDefaultCheckoutDate()
+        {
+            dtpCheckOutDate.Value = dtpCheckInDate.Value.AddDays(1);
         }
 
         private void btnMakeBooking_Click(object sender, EventArgs e)
@@ -111,12 +120,18 @@ namespace HotelBookingSystem
                     DateTime checkInDate = dtpCheckInDate.Value;
                     DateTime checkOutDate = dtpCheckOutDate.Value;
 
+                    if (checkOutDate <= checkInDate)
+                    {
+                        MessageBox.Show("Check-out date must be after check-in date.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
                     var guest = hotelManager.Guests.FirstOrDefault(g => g.GuestID == guestID);
                     var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
 
                     if (room != null && guest != null)
                     {
-                        var booking = new Booking(hotelManager.Bookings.Count + 1, room, guest, checkInDate, checkOutDate);
+                        var booking = new Booking(hotelManager.Bookings.Count + 1, room, guest, checkInDate, checkOutDate, guest.GetName(), room.Price);
                         hotelManager.MakeBooking(booking);
                         UpdateBookingList();
                         SaveBookingsToFile();
@@ -136,7 +151,9 @@ namespace HotelBookingSystem
             {
                 MessageBox.Show("Error making booking: " + ex.Message);
             }
+            LoadAvailableRooms();
         }
+
 
         private void btnCancelBooking_Click(object sender, EventArgs e)
         {
@@ -144,7 +161,7 @@ namespace HotelBookingSystem
             {
                 if (lstBookings.SelectedItem != null)
                 {
-                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split(' ')[0]);
+                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split(' ')[2]); // Adjust index as needed
                     hotelManager.CancelBooking(bookingID);
                     UpdateBookingList();
                     SaveBookingsToFile();
@@ -159,6 +176,7 @@ namespace HotelBookingSystem
             {
                 MessageBox.Show("Error canceling booking: " + ex.Message);
             }
+            LoadAvailableRooms();
         }
 
         private void LoadBookingsFromFile()
@@ -172,25 +190,28 @@ namespace HotelBookingSystem
                     foreach (string line in lines)
                     {
                         string[] parts = line.Split('|');
-                        if (parts.Length == 5)
+                        if (parts.Length == 7)
                         {
                             int bookingID = int.Parse(parts[0]);
                             int roomNumber = int.Parse(parts[1]);
                             int guestID = int.Parse(parts[2]);
                             DateTime checkInDate = DateTime.Parse(parts[3]);
                             DateTime checkOutDate = DateTime.Parse(parts[4]);
+                            string guestName = parts[5];
+                            decimal roomPrice = decimal.Parse(parts[6]);
 
                             var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
                             var guest = hotelManager.Guests.FirstOrDefault(g => g.GuestID == guestID);
 
                             if (room != null && guest != null)
                             {
-                                var booking = new Booking(bookingID, room, guest, checkInDate, checkOutDate);
+                                var booking = new Booking(bookingID, room, guest, checkInDate, checkOutDate, guestName, roomPrice);
                                 hotelManager.Bookings.Add(booking);
                             }
                         }
                     }
                     MessageBox.Show("Bookings loaded successfully.");
+                    UpdateBookingList(); // Update the booking list after loading bookings
                 }
                 else
                 {
@@ -214,7 +235,7 @@ namespace HotelBookingSystem
                     decimal totalPrice = booking.CalculateTotalPrice();
                     string bookingDetails = $"Booking ID: {booking.BookingID} - " +
                                             $"Room Number: {booking.Room.RoomNumber} - " +
-                                            $"Guest: {booking.Guest.Name} - " +
+                                            $"Guest: {booking.Guest.GetName()} - " +
                                             $"Check-in Date: {booking.CheckInDate:yyyy-MM-dd} - " +
                                             $"Check-out Date: {booking.CheckOutDate:yyyy-MM-dd} - " +
                                             $"Nights: {nights} - " +
@@ -256,28 +277,5 @@ namespace HotelBookingSystem
             CalculatePrice();
         }
 
-        private void btnManageGuests_Click(object sender, EventArgs e)
-        {
-            using (var manageGuestsForm = new ManageGuestsForm(hotelManager))
-            {
-                if (manageGuestsForm.ShowDialog() == DialogResult.OK)
-                {
-                    LoadGuests(); // Reload guests after managing
-                }
-            }
-        }
-
-        private void btnCreateGuest_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var manageGuestsForm = new ManageGuestsForm(hotelManager);
-                manageGuestsForm.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening manage guests form: " + ex.Message);
-            }
-        }
     }
 }

@@ -49,12 +49,6 @@ namespace HotelBookingSystem
 
 
 
-        // Method to toggle room availability
-        public void ToggleAvailability()
-        {
-            IsAvailable = !IsAvailable;
-        }
-
 
         // Override ToString method for easier room information display
         public override string ToString()

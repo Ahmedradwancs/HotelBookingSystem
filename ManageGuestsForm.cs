@@ -9,7 +9,6 @@ namespace HotelBookingSystem
 {
     public partial class ManageGuestsForm : Form
     {
-        private List<Guest> guests = new List<Guest>();
         private HotelManager hotelManager;
         private const string GuestsFilePath = "guests.txt";
 
@@ -33,13 +32,13 @@ namespace HotelBookingSystem
                 }
 
                 var guest = new Guest(
-                    guests.Count + 1,
+                    hotelManager.Guests.Count + 1,
                     txtName.Text,
                     txtPhone.Text,
                     txtEmail.Text
                 );
 
-                guests.Add(guest);
+                hotelManager.Guests.Add(guest);
                 lstGuests.Items.Add(guest);
                 ClearGuestInputFields();
                 SaveGuestsToFile();
@@ -54,7 +53,7 @@ namespace HotelBookingSystem
         {
             if (lstGuests.SelectedItem is Guest selectedGuest)
             {
-                guests.Remove(selectedGuest);
+                hotelManager.Guests.Remove(selectedGuest);
                 lstGuests.Items.Remove(selectedGuest);
                 SaveGuestsToFile();
             }
@@ -110,7 +109,7 @@ namespace HotelBookingSystem
             {
                 using (StreamWriter writer = new StreamWriter(GuestsFilePath))
                 {
-                    foreach (var guest in guests)
+                    foreach (var guest in hotelManager.Guests)
                     {
                         writer.WriteLine($"{guest.GuestID}|{guest.GetName()}|{guest.GetPhone()}|{guest.GetEmail()}");
                     }
@@ -122,29 +121,13 @@ namespace HotelBookingSystem
                 MessageBox.Show($"Error saving guests to file: {ex.Message}");
             }
         }
-        public Guest GetCreatedGuest()
-        {
-            if (string.IsNullOrWhiteSpace(txtName.Text) ||
-                string.IsNullOrWhiteSpace(txtEmail.Text) ||
-                string.IsNullOrWhiteSpace(txtPhone.Text))
-            {
-                MessageBox.Show("Please fill in all fields.");
-                return null;
-            }
-
-            return new Guest(
-                guests.Count + 1,
-                txtName.Text,
-                txtPhone.Text,
-                txtEmail.Text
-            );
-        }
-
 
         private void LoadGuestsFromFile()
         {
             try
             {
+                hotelManager.Guests.Clear();
+                lstGuests.Items.Clear();
                 if (File.Exists(GuestsFilePath))
                 {
                     using (StreamReader reader = new StreamReader(GuestsFilePath))
@@ -156,7 +139,7 @@ namespace HotelBookingSystem
                             if (parts.Length == 4)
                             {
                                 var guest = new Guest(int.Parse(parts[0]), parts[1], parts[2], parts[3]);
-                                guests.Add(guest);
+                                hotelManager.Guests.Add(guest);
                                 lstGuests.Items.Add(guest);
                             }
                         }
