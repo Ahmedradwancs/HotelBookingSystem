@@ -149,7 +149,7 @@ namespace HotelBookingSystem
             LoadAvailableRooms();
         }
 
-        private void btnCancelBooking_Click(object sender, EventArgs e)
+        private void btnDeleteBooking_Click(object sender, EventArgs e)
         {
             try
             {
@@ -160,16 +160,16 @@ namespace HotelBookingSystem
                     hotelManager.CancelBooking(bookingID);
                     UpdateBookingList();
                     SaveBookingsToFile();
-                    MessageBox.Show("Booking successfully canceled!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Booking successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Please select a booking to cancel.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a booking to Delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error canceling booking: " + ex.Message);
+                MessageBox.Show("Error deleting booking: " + ex.Message);
             }
             LoadAvailableRooms();
         }
