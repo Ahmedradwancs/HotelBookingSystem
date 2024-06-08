@@ -21,6 +21,13 @@ namespace HotelBookingSystem
 
             // Subscribe to the SelectedIndexChanged event of cmbGuest
             cmbGuest.SelectedIndexChanged += cmbGuest_SelectedIndexChanged;
+
+            // Subscribe to the ValueChanged events of the date pickers
+            dtpCheckInDate.ValueChanged += dtpCheckInDate_ValueChanged;
+            dtpCheckOutDate.ValueChanged += dtpCheckOutDate_ValueChanged;
+
+            // Subscribe to the SelectedIndexChanged event of cmbRoom
+            cmbRoom.SelectedIndexChanged += cmbRoom_SelectedIndexChanged;
         }
 
         private void LoadGuests()
@@ -93,11 +100,11 @@ namespace HotelBookingSystem
                     if (nights > 0) // Ensure the number of nights is positive
                     {
                         decimal totalPrice = room.Price * nights;
-                        lblMoney.Text = $"Total amount to pay: {totalPrice:C}$";
+                        lblMoney.Text = $"Total amount to pay: {totalPrice}$";
                     }
                     else
                     {
-                        lblMoney.Text = "Invalid stay duration.";
+                        lblMoney.Text = "Please select valid duration to show the total cost!";
                     }
                 }
             }
@@ -130,7 +137,9 @@ namespace HotelBookingSystem
                         UpdateBookingList(); // Ensure booking list is updated
                         SaveBookingsToFile();
                         MessageBox.Show("Booking successfully made!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        UpdateBookingList(); // Update the booking list again after saving to file
+                        ClearFields(); // Clear the fields after booking
+                        //UpdateBookingList(); // Update the booking list again after saving to file
+
                     }
                     else
                     {
@@ -258,7 +267,16 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error saving bookings to file: " + ex.Message);
             }
         }
+        private void ClearFields()
+        {
+            cmbGuest.SelectedIndex = -1;
+            cmbRoom.SelectedIndex = -1;
+            dtpCheckInDate.Value = DateTime.Today;
+            dtpCheckOutDate.Value = DateTime.Today;
+            lblMoney.Text = "Total amount to pay: ";
+            btnName.Text = "Guest Name";
 
+        }
         private void dtpCheckInDate_ValueChanged(object sender, EventArgs e)
         {
             CalculatePrice();
@@ -288,6 +306,16 @@ namespace HotelBookingSystem
         {
             dtpCheckInDate.Value = DateTime.Today;
             dtpCheckOutDate.Value = DateTime.Today; 
+        }
+
+        private void BookingForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

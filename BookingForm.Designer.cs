@@ -98,7 +98,7 @@ namespace HotelBookingSystem
             this.lstBookings.ItemHeight = 16;
             this.lstBookings.Location = new System.Drawing.Point(12, 591);
             this.lstBookings.Name = "lstBookings";
-            this.lstBookings.Size = new System.Drawing.Size(579, 196);
+            this.lstBookings.Size = new System.Drawing.Size(621, 196);
             this.lstBookings.TabIndex = 4;
             // 
             // btnMakeBooking
@@ -114,7 +114,7 @@ namespace HotelBookingSystem
             // btnDeleteBooking
             // 
             this.btnDeleteBooking.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteBooking.Location = new System.Drawing.Point(597, 630);
+            this.btnDeleteBooking.Location = new System.Drawing.Point(639, 627);
             this.btnDeleteBooking.Name = "btnDeleteBooking";
             this.btnDeleteBooking.Size = new System.Drawing.Size(129, 43);
             this.btnDeleteBooking.TabIndex = 6;
@@ -214,7 +214,7 @@ namespace HotelBookingSystem
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(12, 517);
+            this.label1.Location = new System.Drawing.Point(12, 520);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(179, 36);
             this.label1.TabIndex = 14;
@@ -222,36 +222,37 @@ namespace HotelBookingSystem
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(124, 556);
+            this.button4.Location = new System.Drawing.Point(98, 567);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(110, 33);
+            this.button4.Size = new System.Drawing.Size(90, 24);
             this.button4.TabIndex = 15;
-            this.button4.Text = "Room Number";
+            this.button4.Text = "Room No.";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(597, 556);
+            this.button5.Location = new System.Drawing.Point(461, 567);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(115, 33);
+            this.button5.Size = new System.Drawing.Size(93, 22);
             this.button5.TabIndex = 16;
             this.button5.Text = "No. of nights";
             this.button5.UseVisualStyleBackColor = true;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(492, 556);
+            this.button6.Location = new System.Drawing.Point(372, 567);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(99, 33);
+            this.button6.Size = new System.Drawing.Size(86, 23);
             this.button6.TabIndex = 17;
             this.button6.Text = "Check out";
             this.button6.UseVisualStyleBackColor = true;
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(382, 556);
+            this.button7.Location = new System.Drawing.Point(288, 568);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(104, 33);
+            this.button7.Size = new System.Drawing.Size(80, 22);
             this.button7.TabIndex = 18;
             this.button7.Text = "Check in";
             this.button7.UseVisualStyleBackColor = true;
@@ -259,18 +260,18 @@ namespace HotelBookingSystem
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(240, 556);
+            this.button8.Location = new System.Drawing.Point(192, 567);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(136, 33);
+            this.button8.Size = new System.Drawing.Size(92, 24);
             this.button8.TabIndex = 19;
             this.button8.Text = "Guest Name";
             this.button8.UseVisualStyleBackColor = true;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(12, 556);
+            this.button9.Location = new System.Drawing.Point(12, 567);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(101, 33);
+            this.button9.Size = new System.Drawing.Size(83, 24);
             this.button9.TabIndex = 20;
             this.button9.Text = "Booking ID";
             this.button9.UseVisualStyleBackColor = true;
@@ -278,9 +279,9 @@ namespace HotelBookingSystem
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(597, 517);
+            this.button10.Location = new System.Drawing.Point(555, 567);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(115, 33);
+            this.button10.Size = new System.Drawing.Size(78, 23);
             this.button10.TabIndex = 21;
             this.button10.Text = "Total cost";
             this.button10.UseVisualStyleBackColor = true;
@@ -288,7 +289,7 @@ namespace HotelBookingSystem
             // btnUpdateBooking
             // 
             this.btnUpdateBooking.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateBooking.Location = new System.Drawing.Point(597, 697);
+            this.btnUpdateBooking.Location = new System.Drawing.Point(639, 694);
             this.btnUpdateBooking.Name = "btnUpdateBooking";
             this.btnUpdateBooking.Size = new System.Drawing.Size(129, 43);
             this.btnUpdateBooking.TabIndex = 22;
@@ -297,7 +298,7 @@ namespace HotelBookingSystem
             // 
             // BookingForm
             // 
-            this.ClientSize = new System.Drawing.Size(748, 799);
+            this.ClientSize = new System.Drawing.Size(809, 799);
             this.Controls.Add(this.btnUpdateBooking);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -312,6 +313,7 @@ namespace HotelBookingSystem
             this.Controls.Add(this.btnDeleteBooking);
             this.Name = "BookingForm";
             this.Text = "Booking";
+            this.Load += new System.EventHandler(this.BookingForm_Load);
             this.groupBoxGuest.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
