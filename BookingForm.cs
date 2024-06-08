@@ -16,7 +16,7 @@ namespace HotelBookingSystem
             LoadGuests();
             LoadAvailableRooms();
             UpdateBookingList();
-            SetDefaultCheckoutDate();
+            SetDefaultDates(); // Set default check-in and check-out dates to the same day
             LoadBookingsFromFile();
 
             // Subscribe to the SelectedIndexChanged event of cmbGuest
@@ -155,7 +155,8 @@ namespace HotelBookingSystem
             {
                 if (lstBookings.SelectedItem != null)
                 {
-                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split(' ')[2]); // Adjust index as needed
+                    //get the booking ID from the selected item
+                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split('\t')[0]); 
                     hotelManager.CancelBooking(bookingID);
                     UpdateBookingList();
                     SaveBookingsToFile();
@@ -223,17 +224,20 @@ namespace HotelBookingSystem
             lstBookings.Items.Clear();
             try
             {
+                // Adding the header line first
+                lstBookings.Items.Add("Booking ID\tRoom Number\tGuest Name\tCheck-in Date\tCheck-out Date\tNights\tTotal Price");
+
                 foreach (var booking in hotelManager.Bookings)
                 {
                     int nights = (booking.CheckOutDate - booking.CheckInDate).Days;
                     decimal totalPrice = booking.CalculateTotalPrice();
-                    string bookingDetails = $"Booking ID: {booking.BookingID} - " +
-                                            $"Room Number: {booking.Room.RoomNumber} - " +
-                                            $"Guest: {booking.Guest.GetName()} - " +
-                                            $"Check-in Date: {booking.CheckInDate:yyyy-MM-dd} - " +
-                                            $"Check-out Date: {booking.CheckOutDate:yyyy-MM-dd} - " +
-                                            $"Nights: {nights} - " +
-                                            $"Total Price: {totalPrice:C}";
+                    string bookingDetails = $"{booking.BookingID}\t \t" +
+                                            $"{booking.Room.RoomNumber}\t \t" +
+                                            $"{booking.Guest.GetName()}\t \t" +
+                                            $"{booking.CheckInDate:yyyy-MM-dd}\t " +
+                                            $"{booking.CheckOutDate:yyyy-MM-dd}\t" +
+                                            $"{nights}\t" +
+                                            $"{totalPrice:C}";
                     lstBookings.Items.Add(bookingDetails);
                 }
             }
@@ -257,12 +261,6 @@ namespace HotelBookingSystem
 
         private void dtpCheckInDate_ValueChanged(object sender, EventArgs e)
         {
-            SetDefaultCheckoutDate();
-        }
-
-        private void SetDefaultCheckoutDate()
-        {
-            dtpCheckOutDate.Value = dtpCheckInDate.Value.AddDays(1);
             CalculatePrice();
         }
 
@@ -284,6 +282,12 @@ namespace HotelBookingSystem
         private void button7_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SetDefaultDates()
+        {
+            dtpCheckInDate.Value = DateTime.Today;
+            dtpCheckOutDate.Value = DateTime.Today; 
         }
     }
 }
