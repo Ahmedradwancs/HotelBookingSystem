@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelBookingSystem
 {
@@ -10,52 +6,28 @@ namespace HotelBookingSystem
     {
         Single,
         Double,
-        Suite,
-        Family
+        Family,
+        Suite
     }
 
     public class Room
     {
         public int RoomNumber { get; }
-        public RoomType Type { get; }
+        public RoomType Type { get; set; }
         public bool IsAvailable { get; set; }
-        public decimal Price { get; }
+        public decimal Price { get; set; }
 
-
-        // Constructor with default prices for each room type
-        public Room(int roomNumber, RoomType type, bool isAvailable)
+        public Room(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
             RoomNumber = roomNumber;
             Type = type;
             IsAvailable = isAvailable;
-            Price = GetDefaultPrice(type);
+            Price = price;
         }
 
-        // Method to get the default price based on room type
-        private decimal GetDefaultPrice(RoomType type)
-        {
-            switch (type)
-            {
-                case RoomType.Single:
-                    return 100; // Example price for Single room
-                case RoomType.Double:
-                    return 150; // Example price for Double room
-                case RoomType.Suite:
-                    return 250; // Example price for Suite room
-                case RoomType.Family:
-                    return 300; // Example price for Family room
-                default:
-                    return 0; // Default price
-            }
-        }
-
-
-
-
-        // Override ToString method for easier room information display
         public override string ToString()
         {
-            return $"Room {RoomNumber} - {Type} - ${Price}";
+            return $"{RoomNumber} - {Type} - {(IsAvailable ? "Available" : "Not Available")} - ${Price}";
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace HotelBookingSystem
@@ -24,26 +22,33 @@ namespace HotelBookingSystem
             try
             {
                 if (string.IsNullOrWhiteSpace(txtRoomNumber.Text) ||
-                    cmbRoomType.SelectedItem == null)
+                    cmbRoomType.SelectedItem == null ||
+                    string.IsNullOrWhiteSpace(txtPrice.Text))
                 {
                     MessageBox.Show("Please fill in all fields.");
                     return;
                 }
 
-                int roomNumber;
-                if (!int.TryParse(txtRoomNumber.Text, out roomNumber))
+                if (!int.TryParse(txtRoomNumber.Text, out int roomNumber))
                 {
                     MessageBox.Show("Please enter a valid room number.");
+                    return;
+                }
+
+                if (!decimal.TryParse(txtPrice.Text, out decimal price))
+                {
+                    MessageBox.Show("Please enter a valid price.");
                     return;
                 }
 
                 var room = new Room(
                     roomNumber,
                     (RoomType)cmbRoomType.SelectedItem,
-                    chkIsAvailable.Checked
+                    chkIsAvailable.Checked,
+                    price
                 );
 
-                hotelManager.AddRoom(roomNumber, room.Type, room.IsAvailable);
+                hotelManager.AddRoom(roomNumber, room.Type, room.IsAvailable, room.Price);
                 lstRooms.Items.Add(room);
                 ClearRoomInputFields();
                 SaveRoomsToFile();
@@ -68,21 +73,29 @@ namespace HotelBookingSystem
         {
             try
             {
-                if (lstRooms.SelectedItem is Room selectedRoom && cmbRoomType.SelectedItem != null)
+                if (lstRooms.SelectedItem is Room selectedRoom &&
+                    cmbRoomType.SelectedItem != null &&
+                    !string.IsNullOrWhiteSpace(txtPrice.Text))
                 {
-                    int roomNumber;
-                    if (!int.TryParse(txtRoomNumber.Text, out roomNumber))
+                    if (!int.TryParse(txtRoomNumber.Text, out int roomNumber))
                     {
                         MessageBox.Show("Please enter a valid room number.");
+                        return;
+                    }
+
+                    if (!decimal.TryParse(txtPrice.Text, out decimal price))
+                    {
+                        MessageBox.Show("Please enter a valid price.");
                         return;
                     }
 
                     RoomType newType = (RoomType)cmbRoomType.SelectedItem;
                     bool isAvailable = chkIsAvailable.Checked;
 
-                    hotelManager.UpdateRoom(roomNumber, newType, isAvailable);
+                    hotelManager.UpdateRoom(roomNumber, newType, isAvailable, price);
                     selectedRoom.Type = newType;
                     selectedRoom.IsAvailable = isAvailable;
+                    selectedRoom.Price = price;
 
                     lstRooms.Items[lstRooms.SelectedIndex] = selectedRoom; // Refresh the listbox
                     ClearRoomInputFields();
@@ -102,6 +115,7 @@ namespace HotelBookingSystem
                 txtRoomNumber.Text = selectedRoom.RoomNumber.ToString();
                 cmbRoomType.SelectedItem = selectedRoom.Type;
                 chkIsAvailable.Checked = selectedRoom.IsAvailable;
+                txtPrice.Text = selectedRoom.Price.ToString();
                 btnUpdateRoom.Enabled = true;
                 btnRemoveRoom.Enabled = true;
             }
@@ -117,6 +131,7 @@ namespace HotelBookingSystem
             txtRoomNumber.Clear();
             cmbRoomType.SelectedIndex = -1;
             chkIsAvailable.Checked = false;
+            txtPrice.Clear();
         }
 
         private void SaveRoomsToFile()
@@ -127,7 +142,7 @@ namespace HotelBookingSystem
                 {
                     foreach (var room in hotelManager.Rooms)
                     {
-                        writer.WriteLine($"{room.RoomNumber}|{room.Type}|{room.IsAvailable}");
+                        writer.WriteLine($"{room.RoomNumber}|{room.Type}|{room.IsAvailable}|{room.Price}");
                     }
                 }
                 MessageBox.Show("Rooms saved successfully.");
@@ -152,13 +167,14 @@ namespace HotelBookingSystem
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 3)
+                            if (parts.Length == 4)
                             {
                                 var roomNumber = int.Parse(parts[0]);
                                 var roomType = (RoomType)Enum.Parse(typeof(RoomType), parts[1]);
                                 var isAvailable = bool.Parse(parts[2]);
+                                var price = decimal.Parse(parts[3]);
 
-                                var room = new Room(roomNumber, roomType, isAvailable);
+                                var room = new Room(roomNumber, roomType, isAvailable, price);
                                 hotelManager.Rooms.Add(room);
                                 lstRooms.Items.Add(room);
                             }

@@ -26,14 +26,14 @@ namespace HotelBookingSystem
         // Initialize rooms
         private void InitializeRooms()
         {
-            Rooms.Add(new Room(101, RoomType.Single, true));
-            Rooms.Add(new Room(102, RoomType.Single, true));
-            Rooms.Add(new Room(201, RoomType.Double, true));
-            Rooms.Add(new Room(202, RoomType.Double, true));
-            Rooms.Add(new Room(301, RoomType.Suite, true));
-            Rooms.Add(new Room(302, RoomType.Suite, true));
-            Rooms.Add(new Room(401, RoomType.Family, true));
-            Rooms.Add(new Room(402, RoomType.Family, true));
+            Rooms.Add(new Room(101, RoomType.Single, true, 100));
+            Rooms.Add(new Room(102, RoomType.Single, true, 100));
+            Rooms.Add(new Room(201, RoomType.Double, true, 150));
+            Rooms.Add(new Room(202, RoomType.Double, true, 150));
+            Rooms.Add(new Room(301, RoomType.Suite, true, 200));
+            Rooms.Add(new Room(302, RoomType.Suite, true, 200));
+            Rooms.Add(new Room(401, RoomType.Family, true, 300));
+            Rooms.Add(new Room(402, RoomType.Family, true, 300));
         }
 
         public List<Room> GetAvailableRooms()
@@ -145,7 +145,7 @@ namespace HotelBookingSystem
             }
         }
         // Add a new room
-        public void AddRoom(int roomNumber, RoomType type, bool isAvailable)
+        public void AddRoom(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
             if (Rooms.Any(r => r.RoomNumber == roomNumber))
             {
@@ -153,7 +153,7 @@ namespace HotelBookingSystem
                 return;
             }
 
-            var newRoom = new Room(roomNumber, type, isAvailable);
+            var newRoom = new Room(roomNumber, type, isAvailable, price);
             Rooms.Add(newRoom);
             SaveRoomAvailabilityToFile("room_availability.txt");
             Console.WriteLine($"Room {roomNumber} added successfully.");
@@ -181,7 +181,7 @@ namespace HotelBookingSystem
         }
 
         // Update an existing room's type and price
-        public void UpdateRoom(int roomNumber, RoomType newType, bool isAvailable)
+        public void UpdateRoom(int roomNumber, RoomType newType, bool isAvailable, decimal price)
         {
             var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
             if (room == null)
@@ -190,7 +190,7 @@ namespace HotelBookingSystem
                 return;
             }
 
-            var updatedRoom = new Room(room.RoomNumber, newType, room.IsAvailable);
+            var updatedRoom = new Room(room.RoomNumber, newType, room.IsAvailable, room.Price);
             Rooms[Rooms.IndexOf(room)] = updatedRoom;
             SaveRoomAvailabilityToFile("room_availability.txt");
             Console.WriteLine($"Room {roomNumber} updated successfully.");
