@@ -42,7 +42,7 @@ namespace HotelBookingSystem
             // 
             // btnManageGuests
             // 
-            this.btnManageGuests.Location = new System.Drawing.Point(74, 300);
+            this.btnManageGuests.Location = new System.Drawing.Point(78, 300);
             this.btnManageGuests.Name = "btnManageGuests";
             this.btnManageGuests.Size = new System.Drawing.Size(200, 98);
             this.btnManageGuests.TabIndex = 1;
@@ -52,7 +52,7 @@ namespace HotelBookingSystem
             // 
             // btnMakeBooking
             // 
-            this.btnMakeBooking.Location = new System.Drawing.Point(350, 300);
+            this.btnMakeBooking.Location = new System.Drawing.Point(373, 300);
             this.btnMakeBooking.Name = "btnMakeBooking";
             this.btnMakeBooking.Size = new System.Drawing.Size(200, 98);
             this.btnMakeBooking.TabIndex = 2;
@@ -64,7 +64,7 @@ namespace HotelBookingSystem
             // 
             this.richTextBox1.Location = new System.Drawing.Point(124, 74);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(382, 207);
+            this.richTextBox1.Size = new System.Drawing.Size(382, 133);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "Welcome to the Hotel Booking System";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);

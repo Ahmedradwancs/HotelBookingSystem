@@ -32,8 +32,8 @@ namespace HotelBookingSystem
             Rooms.Add(new Room(202, RoomType.Double, true));
             Rooms.Add(new Room(301, RoomType.Suite, true));
             Rooms.Add(new Room(302, RoomType.Suite, true));
-            Rooms.Add(new Room(401, RoomType.Other, true));
-            Rooms.Add(new Room(402, RoomType.Other, true));
+            Rooms.Add(new Room(401, RoomType.Family, true));
+            Rooms.Add(new Room(402, RoomType.Family, true));
         }
 
         public List<Room> GetAvailableRooms()
@@ -143,6 +143,57 @@ namespace HotelBookingSystem
             {
                 Console.WriteLine($"Error loading room availability from file: {ex.Message}");
             }
+        }
+        // Add a new room
+        public void AddRoom(int roomNumber, RoomType type, bool isAvailable)
+        {
+            if (Rooms.Any(r => r.RoomNumber == roomNumber))
+            {
+                Console.WriteLine("Room with this number already exists.");
+                return;
+            }
+
+            var newRoom = new Room(roomNumber, type, isAvailable);
+            Rooms.Add(newRoom);
+            SaveRoomAvailabilityToFile("room_availability.txt");
+            Console.WriteLine($"Room {roomNumber} added successfully.");
+        }
+
+        // Remove an existing room
+        public void RemoveRoom(int roomNumber)
+        {
+            var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+            if (room == null)
+            {
+                Console.WriteLine("Room not found.");
+                return;
+            }
+
+            if (!room.IsAvailable)
+            {
+                Console.WriteLine("Cannot remove a room that is currently booked.");
+                return;
+            }
+
+            Rooms.Remove(room);
+            SaveRoomAvailabilityToFile("room_availability.txt");
+            Console.WriteLine($"Room {roomNumber} removed successfully.");
+        }
+
+        // Update an existing room's type and price
+        public void UpdateRoom(int roomNumber, RoomType newType, bool isAvailable)
+        {
+            var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+            if (room == null)
+            {
+                Console.WriteLine("Room not found.");
+                return;
+            }
+
+            var updatedRoom = new Room(room.RoomNumber, newType, room.IsAvailable);
+            Rooms[Rooms.IndexOf(room)] = updatedRoom;
+            SaveRoomAvailabilityToFile("room_availability.txt");
+            Console.WriteLine($"Room {roomNumber} updated successfully.");
         }
     }
 }

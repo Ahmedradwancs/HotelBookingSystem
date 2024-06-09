@@ -123,7 +123,7 @@ namespace HotelBookingSystem
 
                     if (checkOutDate <= checkInDate)
                     {
-                        MessageBox.Show("Check-out date must be after check-in date.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Check-out date must be after check-in date.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -316,6 +316,11 @@ namespace HotelBookingSystem
         private void button4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            ClearFields();
         }
     }
 }

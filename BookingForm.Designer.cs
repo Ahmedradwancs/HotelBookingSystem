@@ -55,6 +55,7 @@ namespace HotelBookingSystem
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.btnUpdateBooking = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.groupBoxGuest.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -65,16 +66,16 @@ namespace HotelBookingSystem
             this.cmbRoom.FormattingEnabled = true;
             this.cmbRoom.Location = new System.Drawing.Point(138, 212);
             this.cmbRoom.Name = "cmbRoom";
-            this.cmbRoom.Size = new System.Drawing.Size(374, 24);
+            this.cmbRoom.Size = new System.Drawing.Size(568, 24);
             this.cmbRoom.TabIndex = 0;
             // 
             // cmbGuest
             // 
             this.cmbGuest.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGuest.FormattingEnabled = true;
-            this.cmbGuest.Location = new System.Drawing.Point(117, 33);
+            this.cmbGuest.Location = new System.Drawing.Point(191, 33);
             this.cmbGuest.Name = "cmbGuest";
-            this.cmbGuest.Size = new System.Drawing.Size(368, 24);
+            this.cmbGuest.Size = new System.Drawing.Size(479, 24);
             this.cmbGuest.TabIndex = 1;
             this.cmbGuest.SelectedIndexChanged += new System.EventHandler(this.cmbGuest_SelectedIndexChanged);
             // 
@@ -82,14 +83,14 @@ namespace HotelBookingSystem
             // 
             this.dtpCheckInDate.Location = new System.Drawing.Point(138, 248);
             this.dtpCheckInDate.Name = "dtpCheckInDate";
-            this.dtpCheckInDate.Size = new System.Drawing.Size(374, 22);
+            this.dtpCheckInDate.Size = new System.Drawing.Size(568, 22);
             this.dtpCheckInDate.TabIndex = 2;
             // 
             // dtpCheckOutDate
             // 
             this.dtpCheckOutDate.Location = new System.Drawing.Point(138, 286);
             this.dtpCheckOutDate.Name = "dtpCheckOutDate";
-            this.dtpCheckOutDate.Size = new System.Drawing.Size(374, 22);
+            this.dtpCheckOutDate.Size = new System.Drawing.Size(568, 22);
             this.dtpCheckOutDate.TabIndex = 3;
             // 
             // lstBookings
@@ -103,11 +104,11 @@ namespace HotelBookingSystem
             // 
             // btnMakeBooking
             // 
-            this.btnMakeBooking.Location = new System.Drawing.Point(138, 438);
+            this.btnMakeBooking.Location = new System.Drawing.Point(406, 417);
             this.btnMakeBooking.Name = "btnMakeBooking";
-            this.btnMakeBooking.Size = new System.Drawing.Size(242, 43);
+            this.btnMakeBooking.Size = new System.Drawing.Size(215, 43);
             this.btnMakeBooking.TabIndex = 5;
-            this.btnMakeBooking.Text = "Make Booking";
+            this.btnMakeBooking.Text = "Confirm Booking";
             this.btnMakeBooking.UseVisualStyleBackColor = true;
             this.btnMakeBooking.Click += new System.EventHandler(this.btnMakeBooking_Click);
             // 
@@ -124,9 +125,9 @@ namespace HotelBookingSystem
             // 
             // btnAddGuest
             // 
-            this.btnAddGuest.Location = new System.Drawing.Point(16, 33);
+            this.btnAddGuest.Location = new System.Drawing.Point(50, 27);
             this.btnAddGuest.Name = "btnAddGuest";
-            this.btnAddGuest.Size = new System.Drawing.Size(95, 23);
+            this.btnAddGuest.Size = new System.Drawing.Size(110, 37);
             this.btnAddGuest.TabIndex = 7;
             this.btnAddGuest.Text = "Guests list";
             this.btnAddGuest.UseVisualStyleBackColor = true;
@@ -162,7 +163,7 @@ namespace HotelBookingSystem
             // 
             this.btnName.Location = new System.Drawing.Point(6, 155);
             this.btnName.Name = "btnName";
-            this.btnName.Size = new System.Drawing.Size(506, 34);
+            this.btnName.Size = new System.Drawing.Size(700, 34);
             this.btnName.TabIndex = 11;
             this.btnName.Text = "Guest Name";
             this.btnName.UseVisualStyleBackColor = true;
@@ -173,13 +174,14 @@ namespace HotelBookingSystem
             this.groupBoxGuest.Controls.Add(this.cmbGuest);
             this.groupBoxGuest.Location = new System.Drawing.Point(6, 50);
             this.groupBoxGuest.Name = "groupBoxGuest";
-            this.groupBoxGuest.Size = new System.Drawing.Size(506, 76);
+            this.groupBoxGuest.Size = new System.Drawing.Size(700, 76);
             this.groupBoxGuest.TabIndex = 12;
             this.groupBoxGuest.TabStop = false;
             this.groupBoxGuest.Text = "Choose from guests list or go back and register the guest if not found";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnCancel);
             this.groupBox1.Controls.Add(this.lblMoney);
             this.groupBox1.Controls.Add(this.dtpCheckOutDate);
             this.groupBox1.Controls.Add(this.btnName);
@@ -193,7 +195,7 @@ namespace HotelBookingSystem
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(536, 502);
+            this.groupBox1.Size = new System.Drawing.Size(756, 502);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Booking details";
@@ -203,22 +205,23 @@ namespace HotelBookingSystem
             this.lblMoney.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMoney.Location = new System.Drawing.Point(77, 341);
             this.lblMoney.Name = "lblMoney";
-            this.lblMoney.Size = new System.Drawing.Size(343, 50);
+            this.lblMoney.Size = new System.Drawing.Size(544, 50);
             this.lblMoney.TabIndex = 13;
             this.lblMoney.Text = "Total amount to pay";
             this.lblMoney.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
-            this.label1.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.label1.BackColor = System.Drawing.SystemColors.Window;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(12, 520);
+            this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.Location = new System.Drawing.Point(12, 528);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(179, 36);
             this.label1.TabIndex = 14;
             this.label1.Text = "Booking List";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button4
             // 
@@ -296,9 +299,19 @@ namespace HotelBookingSystem
             this.btnUpdateBooking.Text = "Update Booking";
             this.btnUpdateBooking.UseVisualStyleBackColor = true;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(77, 417);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(214, 43);
+            this.btnCancel.TabIndex = 14;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // BookingForm
             // 
-            this.ClientSize = new System.Drawing.Size(809, 799);
+            this.ClientSize = new System.Drawing.Size(787, 799);
             this.Controls.Add(this.btnUpdateBooking);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -337,5 +350,6 @@ namespace HotelBookingSystem
         private Button button9;
         private Button button10;
         private Button btnUpdateBooking;
+        private Button btnCancel;
     }
 }

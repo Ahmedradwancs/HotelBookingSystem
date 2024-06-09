@@ -11,7 +11,7 @@ namespace HotelBookingSystem
         Single,
         Double,
         Suite,
-        Other
+        Family
     }
 
     public class Room
@@ -42,6 +42,8 @@ namespace HotelBookingSystem
                     return 150; // Example price for Double room
                 case RoomType.Suite:
                     return 250; // Example price for Suite room
+                case RoomType.Family:
+                    return 300; // Example price for Family room
                 default:
                     return 0; // Default price
             }
