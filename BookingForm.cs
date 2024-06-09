@@ -66,7 +66,7 @@ namespace HotelBookingSystem
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating guest name: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error updating guest name: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -77,7 +77,8 @@ namespace HotelBookingSystem
             {
                 foreach (var room in hotelManager.GetAvailableRooms())
                 {
-                    cmbRoom.Items.Add(room);  // Add room objects directly
+                    // Add room number and type and price to the combo box
+                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.Type} - {room.Price:C}");                    
                 }
             }
             catch (Exception ex)
@@ -91,7 +92,7 @@ namespace HotelBookingSystem
             if (cmbRoom.SelectedItem != null)
             {
                 var selectedRoom = cmbRoom.SelectedItem.ToString();
-                int roomNumber = int.Parse(selectedRoom.Split(' ')[1]);
+                int roomNumber = int.Parse(selectedRoom.Split(' ')[0]);
                 var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
 
                 if (room != null)
@@ -116,7 +117,7 @@ namespace HotelBookingSystem
             {
                 if (cmbRoom.SelectedItem != null && cmbGuest.SelectedItem != null)
                 {
-                    int roomNumber = int.Parse(cmbRoom.SelectedItem.ToString().Split(' ')[1]);
+                    int roomNumber = int.Parse(cmbRoom.SelectedItem.ToString().Split(' ')[0]);
                     int guestID = int.Parse(cmbGuest.SelectedItem.ToString().Split(' ')[0]);
                     DateTime checkInDate = dtpCheckInDate.Value;
                     DateTime checkOutDate = dtpCheckOutDate.Value;
@@ -289,7 +290,10 @@ namespace HotelBookingSystem
 
         private void cmbRoom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalculatePrice();
+            if (cmbRoom.SelectedItem != null)
+            {
+                CalculatePrice();
+            }
         }
 
         private void button9_Click(object sender, EventArgs e)

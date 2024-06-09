@@ -7,7 +7,7 @@ namespace HotelBookingSystem
         Single,
         Double,
         Family,
-        Suite
+        Suite,
     }
 
     public class Room

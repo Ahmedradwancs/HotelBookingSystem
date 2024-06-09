@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelBookingSystem
 {
@@ -18,22 +16,47 @@ namespace HotelBookingSystem
             Rooms = new List<Room>();
             Guests = new List<Guest>();
             Bookings = new List<Booking>();
-            InitializeRooms();
+            LoadRoomsFromFile("rooms.txt");
             LoadGuestsFromFile("guests.txt");
             LoadRoomAvailabilityFromFile("room_availability.txt"); // Load room availability when the manager is created
         }
 
-        // Initialize rooms
-        private void InitializeRooms()
+        // Initialize rooms by loading from file
+        private void LoadRoomsFromFile(string filePath)
         {
-            Rooms.Add(new Room(101, RoomType.Single, true, 100));
-            Rooms.Add(new Room(102, RoomType.Single, true, 100));
-            Rooms.Add(new Room(201, RoomType.Double, true, 150));
-            Rooms.Add(new Room(202, RoomType.Double, true, 150));
-            Rooms.Add(new Room(301, RoomType.Suite, true, 200));
-            Rooms.Add(new Room(302, RoomType.Suite, true, 200));
-            Rooms.Add(new Room(401, RoomType.Family, true, 300));
-            Rooms.Add(new Room(402, RoomType.Family, true, 300));
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 4)
+                            {
+                                int roomNumber = int.Parse(parts[0]);
+                                RoomType roomType = (RoomType)Enum.Parse(typeof(RoomType), parts[1]);
+                                bool isAvailable = bool.Parse(parts[2]);
+                                decimal price = decimal.Parse(parts[3]);
+
+                                var room = new Room(roomNumber, roomType, isAvailable, price);
+                                Rooms.Add(room);
+                            }
+                        }
+                    }
+                    Console.WriteLine("Rooms loaded successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("No existing rooms file found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading rooms from file: {ex.Message}");
+            }
         }
 
         public List<Room> GetAvailableRooms()
@@ -42,7 +65,7 @@ namespace HotelBookingSystem
             return Rooms.Where(room => room.IsAvailable).ToList();
         }
 
-        // Get guests from guests.
+        // Get guests from guests file
         public void LoadGuestsFromFile(string filePath)
         {
             try
@@ -144,6 +167,7 @@ namespace HotelBookingSystem
                 Console.WriteLine($"Error loading room availability from file: {ex.Message}");
             }
         }
+
         // Add a new room
         public void AddRoom(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
