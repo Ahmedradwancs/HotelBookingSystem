@@ -10,17 +10,28 @@ using System.Windows.Forms;
 
 namespace HotelBookingSystem
 {
+    /// <summary>
+    /// Represents the main form of the hotel booking system application.
+    /// </summary>
     public partial class MainForm : Form
     {
         private HotelManager hotelManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainForm"/> class.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
             hotelManager = new HotelManager();
         }
 
-
+        /// <summary>
+        /// Handles the click event for the Manage Guests button.
+        /// Opens the Manage Guests form.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnManageGuests_Click(object sender, EventArgs e)
         {
             try
@@ -34,6 +45,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Make Booking button.
+        /// Opens the Booking form.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnMakeBooking_Click(object sender, EventArgs e)
         {
             try
@@ -47,6 +64,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Manage Rooms button.
+        /// Opens the Manage Rooms form.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnManageRoom_Click(object sender, EventArgs e)
         {
             try
@@ -59,17 +82,5 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error opening manage rooms form: " + ex.Message);
             }
         }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

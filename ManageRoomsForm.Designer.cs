@@ -43,6 +43,8 @@ namespace HotelBookingSystem
             this.lblRoomType = new System.Windows.Forms.Label();
             this.lblIsAvailable = new System.Windows.Forms.Label();
             this.lblPrice = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtRoomNumber
@@ -57,10 +59,10 @@ namespace HotelBookingSystem
             this.cmbRoomType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRoomType.FormattingEnabled = true;
             this.cmbRoomType.Items.AddRange(new object[] {
-            RoomType.Single,
-            RoomType.Double,
-            RoomType.Family,
-            RoomType.Suite});
+            HotelBookingSystem.RoomType.Single,
+            HotelBookingSystem.RoomType.Double,
+            HotelBookingSystem.RoomType.Family,
+            HotelBookingSystem.RoomType.Suite});
             this.cmbRoomType.Location = new System.Drawing.Point(96, 38);
             this.cmbRoomType.Name = "cmbRoomType";
             this.cmbRoomType.Size = new System.Drawing.Size(200, 24);
@@ -71,7 +73,7 @@ namespace HotelBookingSystem
             this.chkIsAvailable.AutoSize = true;
             this.chkIsAvailable.Location = new System.Drawing.Point(96, 68);
             this.chkIsAvailable.Name = "chkIsAvailable";
-            this.chkIsAvailable.Size = new System.Drawing.Size(97, 20);
+            this.chkIsAvailable.Size = new System.Drawing.Size(99, 20);
             this.chkIsAvailable.TabIndex = 2;
             this.chkIsAvailable.Text = "Is Available";
             this.chkIsAvailable.UseVisualStyleBackColor = true;
@@ -87,7 +89,7 @@ namespace HotelBookingSystem
             // 
             this.lstRooms.FormattingEnabled = true;
             this.lstRooms.ItemHeight = 16;
-            this.lstRooms.Location = new System.Drawing.Point(12, 148);
+            this.lstRooms.Location = new System.Drawing.Point(19, 48);
             this.lstRooms.Name = "lstRooms";
             this.lstRooms.Size = new System.Drawing.Size(284, 180);
             this.lstRooms.TabIndex = 4;
@@ -105,7 +107,7 @@ namespace HotelBookingSystem
             // 
             // btnRemoveRoom
             // 
-            this.btnRemoveRoom.Location = new System.Drawing.Point(302, 180);
+            this.btnRemoveRoom.Location = new System.Drawing.Point(320, 101);
             this.btnRemoveRoom.Name = "btnRemoveRoom";
             this.btnRemoveRoom.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveRoom.TabIndex = 6;
@@ -115,7 +117,7 @@ namespace HotelBookingSystem
             // 
             // btnUpdateRoom
             // 
-            this.btnUpdateRoom.Location = new System.Drawing.Point(302, 209);
+            this.btnUpdateRoom.Location = new System.Drawing.Point(320, 130);
             this.btnUpdateRoom.Name = "btnUpdateRoom";
             this.btnUpdateRoom.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateRoom.TabIndex = 7;
@@ -128,7 +130,7 @@ namespace HotelBookingSystem
             this.lblRoomNumber.AutoSize = true;
             this.lblRoomNumber.Location = new System.Drawing.Point(12, 15);
             this.lblRoomNumber.Name = "lblRoomNumber";
-            this.lblRoomNumber.Size = new System.Drawing.Size(66, 16);
+            this.lblRoomNumber.Size = new System.Drawing.Size(68, 16);
             this.lblRoomNumber.TabIndex = 8;
             this.lblRoomNumber.Text = "Room No:";
             // 
@@ -137,7 +139,7 @@ namespace HotelBookingSystem
             this.lblRoomType.AutoSize = true;
             this.lblRoomType.Location = new System.Drawing.Point(12, 41);
             this.lblRoomType.Name = "lblRoomType";
-            this.lblRoomType.Size = new System.Drawing.Size(43, 16);
+            this.lblRoomType.Size = new System.Drawing.Size(42, 16);
             this.lblRoomType.TabIndex = 9;
             this.lblRoomType.Text = "Type:";
             // 
@@ -146,7 +148,7 @@ namespace HotelBookingSystem
             this.lblIsAvailable.AutoSize = true;
             this.lblIsAvailable.Location = new System.Drawing.Point(12, 69);
             this.lblIsAvailable.Name = "lblIsAvailable";
-            this.lblIsAvailable.Size = new System.Drawing.Size(74, 16);
+            this.lblIsAvailable.Size = new System.Drawing.Size(67, 16);
             this.lblIsAvailable.TabIndex = 10;
             this.lblIsAvailable.Text = "Available:";
             // 
@@ -155,29 +157,43 @@ namespace HotelBookingSystem
             this.lblPrice.AutoSize = true;
             this.lblPrice.Location = new System.Drawing.Point(12, 97);
             this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Size = new System.Drawing.Size(42, 16);
+            this.lblPrice.Size = new System.Drawing.Size(41, 16);
             this.lblPrice.TabIndex = 11;
             this.lblPrice.Text = "Price:";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lstRooms);
+            this.groupBox1.Controls.Add(this.btnRemoveRoom);
+            this.groupBox1.Controls.Add(this.btnUpdateRoom);
+            this.groupBox1.Location = new System.Drawing.Point(26, 201);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(422, 252);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
             // ManageRoomsForm
             // 
-            this.ClientSize = new System.Drawing.Size(402, 340);
+            this.ClientSize = new System.Drawing.Size(736, 465);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lblPrice);
             this.Controls.Add(this.lblIsAvailable);
             this.Controls.Add(this.lblRoomType);
             this.Controls.Add(this.lblRoomNumber);
-            this.Controls.Add(this.btnUpdateRoom);
-            this.Controls.Add(this.btnRemoveRoom);
             this.Controls.Add(this.btnAddRoom);
-            this.Controls.Add(this.lstRooms);
             this.Controls.Add(this.txtPrice);
             this.Controls.Add(this.chkIsAvailable);
             this.Controls.Add(this.cmbRoomType);
             this.Controls.Add(this.txtRoomNumber);
             this.Name = "ManageRoomsForm";
             this.Text = "Manage Rooms";
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
+
+        private GroupBox groupBox1;
     }
 }

@@ -5,12 +5,29 @@ using System.Linq;
 
 namespace HotelBookingSystem
 {
+    /// <summary>
+    /// Manages the operations of the hotel, including rooms, guests, and bookings.
+    /// </summary>
     public class HotelManager
     {
+        /// <summary>
+        /// Gets the list of rooms in the hotel.
+        /// </summary>
         public List<Room> Rooms { get; private set; }
+
+        /// <summary>
+        /// Gets the list of guests in the hotel.
+        /// </summary>
         public List<Guest> Guests { get; private set; }
+
+        /// <summary>
+        /// Gets the list of bookings in the hotel.
+        /// </summary>
         public List<Booking> Bookings { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotelManager"/> class.
+        /// </summary>
         public HotelManager()
         {
             Rooms = new List<Room>();
@@ -21,7 +38,7 @@ namespace HotelBookingSystem
             {
                 LoadRoomsFromFile("rooms.txt");
                 LoadGuestsFromFile("guests.txt");
-                LoadRoomAvailabilityFromFile("room_availability.txt"); // Load room availability when the manager is created
+                LoadRoomAvailabilityFromFile("room_availability.txt");
             }
             catch (Exception ex)
             {
@@ -29,7 +46,10 @@ namespace HotelBookingSystem
             }
         }
 
-        // Initialize rooms by loading from file
+        /// <summary>
+        /// Loads rooms from a file.
+        /// </summary>
+        /// <param name="filePath">The path to the file containing room data.</param>
         private void LoadRoomsFromFile(string filePath)
         {
             try
@@ -67,11 +87,14 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Gets the list of available rooms.
+        /// </summary>
+        /// <returns>A list of available rooms.</returns>
         public List<Room> GetAvailableRooms()
         {
             try
             {
-                // Ensure this method only returns rooms that are available
                 return Rooms.Where(room => room.IsAvailable).ToList();
             }
             catch (Exception ex)
@@ -81,7 +104,10 @@ namespace HotelBookingSystem
             }
         }
 
-        // Get guests from guests file
+        /// <summary>
+        /// Loads guests from a file.
+        /// </summary>
+        /// <param name="filePath">The path to the file containing guest data.</param>
         public void LoadGuestsFromFile(string filePath)
         {
             try
@@ -114,14 +140,17 @@ namespace HotelBookingSystem
             }
         }
 
-        // Make booking
+        /// <summary>
+        /// Makes a booking and marks the room as unavailable.
+        /// </summary>
+        /// <param name="booking">The booking to be made.</param>
         public void MakeBooking(Booking booking)
         {
             try
             {
                 Bookings.Add(booking);
-                booking.Room.IsAvailable = false;  // Mark the room as unavailable
-                SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after making a new booking
+                booking.Room.IsAvailable = false;
+                SaveRoomAvailabilityToFile("room_availability.txt");
             }
             catch (Exception ex)
             {
@@ -129,7 +158,10 @@ namespace HotelBookingSystem
             }
         }
 
-        // Cancel booking
+        /// <summary>
+        /// Cancels a booking and marks the room as available.
+        /// </summary>
+        /// <param name="bookingId">The ID of the booking to be canceled.</param>
         public void CancelBooking(int bookingId)
         {
             try
@@ -138,8 +170,8 @@ namespace HotelBookingSystem
                 if (booking != null)
                 {
                     Bookings.Remove(booking);
-                    booking.Room.IsAvailable = true;  // Mark the room as available
-                    SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after canceling a booking
+                    booking.Room.IsAvailable = true;
+                    SaveRoomAvailabilityToFile("room_availability.txt");
                 }
                 else
                 {
@@ -152,6 +184,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Saves room availability to a file.
+        /// </summary>
+        /// <param name="filePath">The path to the file where room availability data will be saved.</param>
         private void SaveRoomAvailabilityToFile(string filePath)
         {
             try
@@ -170,6 +206,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Loads room availability from a file.
+        /// </summary>
+        /// <param name="filePath">The path to the file containing room availability data.</param>
         private void LoadRoomAvailabilityFromFile(string filePath)
         {
             try
@@ -202,7 +242,13 @@ namespace HotelBookingSystem
             }
         }
 
-        // Add a new room
+        /// <summary>
+        /// Adds a new room to the hotel.
+        /// </summary>
+        /// <param name="roomNumber">The room number.</param>
+        /// <param name="type">The type of the room.</param>
+        /// <param name="isAvailable">Indicates whether the room is available.</param>
+        /// <param name="price">The price of the room.</param>
         public void AddRoom(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
             try
@@ -224,7 +270,10 @@ namespace HotelBookingSystem
             }
         }
 
-        // Remove an existing room
+        /// <summary>
+        /// Removes a room from the hotel.
+        /// </summary>
+        /// <param name="roomNumber">The room number of the room to be removed.</param>
         public void RemoveRoom(int roomNumber)
         {
             try
@@ -252,7 +301,13 @@ namespace HotelBookingSystem
             }
         }
 
-        // Update an existing room's type and price
+        /// <summary>
+        /// Updates the details of an existing room.
+        /// </summary>
+        /// <param name="roomNumber">The room number of the room to be updated.</param>
+        /// <param name="newType">The new type of the room.</param>
+        /// <param name="isAvailable">Indicates whether the room is available.</param>
+        /// <param name="price">The new price of the room.</param>
         public void UpdateRoom(int roomNumber, RoomType newType, bool isAvailable, decimal price)
         {
             try

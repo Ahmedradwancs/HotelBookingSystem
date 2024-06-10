@@ -5,11 +5,18 @@ using System.Windows.Forms;
 
 namespace HotelBookingSystem
 {
+    /// <summary>
+    /// Represents the form for managing rooms in the hotel booking system.
+    /// </summary>
     public partial class ManageRoomsForm : Form
     {
         private HotelManager hotelManager;
         private const string RoomsFilePath = "rooms.txt";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageRoomsForm"/> class.
+        /// </summary>
+        /// <param name="hotelManager">The <see cref="HotelManager"/> instance managing the hotel operations.</param>
         public ManageRoomsForm(HotelManager hotelManager)
         {
             InitializeComponent();
@@ -17,6 +24,12 @@ namespace HotelBookingSystem
             LoadRoomsFromFile();
         }
 
+        /// <summary>
+        /// Handles the click event for the Add Room button.
+        /// Adds a new room to the system.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnAddRoom_Click(object sender, EventArgs e)
         {
             try
@@ -60,6 +73,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Remove Room button.
+        /// Removes the selected room from the system.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnRemoveRoom_Click(object sender, EventArgs e)
         {
             try
@@ -82,6 +101,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Update Room button.
+        /// Updates the selected room's information.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnUpdateRoom_Click(object sender, EventArgs e)
         {
             try
@@ -126,6 +151,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the selected index changed event for the rooms list.
+        /// Populates the input fields with the selected room's information.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void lstRooms_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -151,6 +182,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Clears the input fields for room information.
+        /// </summary>
         private void ClearRoomInputFields()
         {
             txtRoomNumber.Clear();
@@ -159,6 +193,9 @@ namespace HotelBookingSystem
             txtPrice.Clear();
         }
 
+        /// <summary>
+        /// Saves the rooms to the file.
+        /// </summary>
         private void SaveRoomsToFile()
         {
             try
@@ -177,6 +214,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Loads the rooms from the file.
+        /// </summary>
         private void LoadRoomsFromFile()
         {
             try
@@ -200,10 +240,9 @@ namespace HotelBookingSystem
 
                                 var room = new Room(roomNumber, roomType, isAvailable, price);
                                 hotelManager.Rooms.Add(room);
-                                //lstRooms.Items.Add(room);
-                                 // Add formatted string to the list box
-                        string formattedRoom = $"{roomNumber,-5} {roomType,-10} {(isAvailable ? "Available" : "Not Available"),-15} ${price,6}";
-                        lstRooms.Items.Add(formattedRoom);
+                                // Add formatted string to the list box
+                                string formattedRoom = $"{roomNumber,-5} {roomType,-10} {(isAvailable ? "Available" : "Not Available"),-15} ${price,6}";
+                                lstRooms.Items.Add(formattedRoom);
                             }
                         }
                     }
@@ -222,5 +261,7 @@ namespace HotelBookingSystem
                 MessageBox.Show($"Error loading rooms: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

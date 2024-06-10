@@ -68,7 +68,6 @@ namespace HotelBookingSystem
             this.richTextBox1.Size = new System.Drawing.Size(382, 133);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "Welcome to the Hotel Booking System";
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // btnManageRoom
             // 
@@ -92,7 +91,6 @@ namespace HotelBookingSystem
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.Text = "Hotel Booking System";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
 
         }

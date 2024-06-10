@@ -7,11 +7,18 @@ using System.Windows.Forms;
 
 namespace HotelBookingSystem
 {
+    /// <summary>
+    /// Represents the form for managing guests in the hotel booking system.
+    /// </summary>
     public partial class ManageGuestsForm : Form
     {
         private HotelManager hotelManager;
         private const string GuestsFilePath = "guests.txt";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageGuestsForm"/> class.
+        /// </summary>
+        /// <param name="hotelManager">The <see cref="HotelManager"/> instance managing the hotel operations.</param>
         public ManageGuestsForm(HotelManager hotelManager)
         {
             InitializeComponent();
@@ -19,6 +26,12 @@ namespace HotelBookingSystem
             LoadGuestsFromFile();
         }
 
+        /// <summary>
+        /// Handles the click event for the Add Guest button.
+        /// Adds a new guest to the system.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
             try
@@ -50,6 +63,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Remove Guest button.
+        /// Removes the selected guest from the system.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnRemoveGuest_Click(object sender, EventArgs e)
         {
             try
@@ -72,6 +91,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the Update Guest button.
+        /// Updates the selected guest's information.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnUpdateGuest_Click(object sender, EventArgs e)
         {
             try
@@ -97,6 +122,12 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the selected index changed event for the guests list.
+        /// Populates the input fields with the selected guest's information.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void lstGuests_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -121,6 +152,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Clears the input fields for guest information.
+        /// </summary>
         private void ClearGuestInputFields()
         {
             txtName.Clear();
@@ -128,6 +162,9 @@ namespace HotelBookingSystem
             txtPhone.Clear();
         }
 
+        /// <summary>
+        /// Saves the guests to the file.
+        /// </summary>
         private void SaveGuestsToFile()
         {
             try
@@ -147,6 +184,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Loads the guests from the file.
+        /// </summary>
         private void LoadGuestsFromFile()
         {
             try

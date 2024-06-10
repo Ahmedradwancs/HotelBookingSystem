@@ -5,10 +5,17 @@ using System.Windows.Forms;
 
 namespace HotelBookingSystem
 {
+    /// <summary>
+    /// Represents the booking form for the hotel booking system.
+    /// </summary>
     public partial class BookingForm : Form
     {
         private HotelManager hotelManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookingForm"/> class.
+        /// </summary>
+        /// <param name="manager">The hotel manager instance.</param>
         public BookingForm(HotelManager manager)
         {
             InitializeComponent();
@@ -18,7 +25,7 @@ namespace HotelBookingSystem
                 LoadGuests();
                 LoadAvailableRooms();
                 UpdateBookingList();
-                SetDefaultDates(); // Set default check-in and check-out dates to the same day
+                SetDefaultDates();
                 LoadBookingsFromFile();
             }
             catch (Exception ex)
@@ -26,17 +33,15 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error initializing booking form: " + ex.Message);
             }
 
-            // Subscribe to the SelectedIndexChanged event of cmbGuest
             cmbGuest.SelectedIndexChanged += cmbGuest_SelectedIndexChanged;
-
-            // Subscribe to the ValueChanged events of the date pickers
             dtpCheckInDate.ValueChanged += dtpCheckInDate_ValueChanged;
             dtpCheckOutDate.ValueChanged += dtpCheckOutDate_ValueChanged;
-
-            // Subscribe to the SelectedIndexChanged event of cmbRoom
             cmbRoom.SelectedIndexChanged += cmbRoom_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Loads the list of guests into the guest combo box.
+        /// </summary>
         private void LoadGuests()
         {
             cmbGuest.Items.Clear();
@@ -53,6 +58,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the guest combo box.
+        /// Updates the guest name button with the selected guest's name.
+        /// </summary>
         private void cmbGuest_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -60,9 +69,9 @@ namespace HotelBookingSystem
                 if (cmbGuest.SelectedItem != null)
                 {
                     string[] selectedItemParts = cmbGuest.SelectedItem.ToString().Split(' ');
-                    if (selectedItemParts.Length >= 3) // Ensure there are at least 3 parts (GuestID, "-", GuestName)
+                    if (selectedItemParts.Length >= 3)
                     {
-                        string guestName = string.Join(" ", selectedItemParts.Skip(2)); // Join remaining parts to get the guest name
+                        string guestName = string.Join(" ", selectedItemParts.Skip(2));
                         btnName.Text = guestName;
                     }
                     else
@@ -77,6 +86,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Loads the list of available rooms into the room combo box.
+        /// </summary>
         private void LoadAvailableRooms()
         {
             cmbRoom.Items.Clear();
@@ -84,7 +96,6 @@ namespace HotelBookingSystem
             {
                 foreach (var room in hotelManager.GetAvailableRooms())
                 {
-                    // Add room number and type and price to the combo box
                     cmbRoom.Items.Add($"{room.RoomNumber} - {room.Type} - {room.Price:C}");
                 }
             }
@@ -94,6 +105,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Calculates the total price for the selected room and dates.
+        /// </summary>
         private void CalculatePrice()
         {
             try
@@ -107,7 +121,7 @@ namespace HotelBookingSystem
                     if (room != null)
                     {
                         int nights = (dtpCheckOutDate.Value - dtpCheckInDate.Value).Days;
-                        if (nights > 0) // Ensure the number of nights is positive
+                        if (nights > 0)
                         {
                             decimal totalPrice = room.Price * nights;
                             lblMoney.Text = $"Total amount to pay: {totalPrice}$";
@@ -125,6 +139,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the make booking button.
+        /// Makes a booking with the selected room, guest, and dates.
+        /// </summary>
         private void btnMakeBooking_Click(object sender, EventArgs e)
         {
             try
@@ -149,11 +167,11 @@ namespace HotelBookingSystem
                     {
                         var booking = new Booking(hotelManager.Bookings.Count + 1, room, guest, checkInDate, checkOutDate, guest.GetName(), room.Price);
                         hotelManager.MakeBooking(booking);
-                        UpdateBookingList(); // Ensure booking list is updated
+                        UpdateBookingList();
                         SaveBookingsToFile();
                         MessageBox.Show("Booking successfully made!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ClearFields(); // Clear the fields after booking
-                        LoadAvailableRooms(); // Update available rooms after making a booking
+                        ClearFields();
+                        LoadAvailableRooms();
                     }
                     else
                     {
@@ -171,13 +189,16 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the delete booking button.
+        /// Deletes the selected booking.
+        /// </summary>
         private void btnDeleteBooking_Click(object sender, EventArgs e)
         {
             try
             {
                 if (lstBookings.SelectedItem != null)
                 {
-                    //get the booking ID from the selected item
                     int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split('\t')[0]);
                     hotelManager.CancelBooking(bookingID);
                     UpdateBookingList();
@@ -196,6 +217,9 @@ namespace HotelBookingSystem
             LoadAvailableRooms();
         }
 
+        /// <summary>
+        /// Loads bookings from a file and populates the booking list.
+        /// </summary>
         private void LoadBookingsFromFile()
         {
             try
@@ -228,7 +252,7 @@ namespace HotelBookingSystem
                         }
                     }
                     MessageBox.Show("Bookings loaded successfully.");
-                    UpdateBookingList(); // Update the booking list after loading bookings
+                    UpdateBookingList();
                 }
                 else
                 {
@@ -241,14 +265,14 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Updates the booking list display with the current bookings.
+        /// </summary>
         private void UpdateBookingList()
         {
             lstBookings.Items.Clear();
             try
             {
-                // Adding the header line first
-                lstBookings.Items.Add("Booking ID\tRoom Number\tGuest Name\tCheck-in Date\tCheck-out Date\tNights\tTotal Price");
-
                 foreach (var booking in hotelManager.Bookings)
                 {
                     int nights = (booking.CheckOutDate - booking.CheckInDate).Days;
@@ -269,6 +293,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Saves the current bookings to a file.
+        /// </summary>
         private void SaveBookingsToFile()
         {
             try
@@ -281,6 +308,9 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Clears the fields in the booking form.
+        /// </summary>
         private void ClearFields()
         {
             try
@@ -298,6 +328,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the ValueChanged event of the check-in date picker.
+        /// Calculates the price based on the new check-in date.
+        /// </summary>
         private void dtpCheckInDate_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -310,6 +344,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the ValueChanged event of the check-out date picker.
+        /// Calculates the price based on the new check-out date.
+        /// </summary>
         private void dtpCheckOutDate_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -322,6 +360,10 @@ namespace HotelBookingSystem
             }
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the room combo box.
+        /// Calculates the price based on the selected room.
+        /// </summary>
         private void cmbRoom_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -337,14 +379,9 @@ namespace HotelBookingSystem
             }
         }
 
-        private void button9_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-        }
-
+        /// <summary>
+        /// Sets the default dates for check-in and check-out to today's date.
+        /// </summary>
         private void SetDefaultDates()
         {
             try
@@ -357,15 +394,12 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error setting default dates: " + ex.Message);
             }
         }
+ 
 
-        private void BookingForm_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-        }
-
+        /// <summary>
+        /// Handles the Click event of the cancel button.
+        /// Clears the booking form fields.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
