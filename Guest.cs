@@ -26,7 +26,7 @@ namespace HotelBookingSystem
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Name cannot be null or empty.");
+                throw new ArgumentException("Name cannot be null or empty.", nameof(name));
             }
             Name = name;
         }
@@ -40,7 +40,7 @@ namespace HotelBookingSystem
         {
             if (string.IsNullOrWhiteSpace(phone))
             {
-                throw new ArgumentException("Phone cannot be null or empty.");
+                throw new ArgumentException("Phone cannot be null or empty.", nameof(phone));
             }
             Phone = phone;
         }
@@ -54,7 +54,7 @@ namespace HotelBookingSystem
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ArgumentException("Email cannot be null or empty.");
+                throw new ArgumentException("Email cannot be null or empty.", nameof(email));
             }
             Email = email;
         }

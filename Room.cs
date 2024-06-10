@@ -19,6 +19,16 @@ namespace HotelBookingSystem
 
         public Room(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
+            if (roomNumber <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(roomNumber), "Room number must be greater than zero.");
+            }
+
+            if (price < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
+            }
+
             RoomNumber = roomNumber;
             Type = type;
             IsAvailable = isAvailable;
@@ -27,7 +37,14 @@ namespace HotelBookingSystem
 
         public override string ToString()
         {
-            return $"{RoomNumber} - {Type} - {(IsAvailable ? "Available" : "Not Available")} - ${Price}";
+            try
+            {
+                return $"{RoomNumber} - {Type} - {(IsAvailable ? "Available" : "Not Available")} - ${Price}";
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error generating string representation of Room: " + ex.Message);
+            }
         }
     }
 }

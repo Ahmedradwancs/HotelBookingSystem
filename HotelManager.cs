@@ -16,9 +16,17 @@ namespace HotelBookingSystem
             Rooms = new List<Room>();
             Guests = new List<Guest>();
             Bookings = new List<Booking>();
-            LoadRoomsFromFile("rooms.txt");
-            LoadGuestsFromFile("guests.txt");
-            LoadRoomAvailabilityFromFile("room_availability.txt"); // Load room availability when the manager is created
+
+            try
+            {
+                LoadRoomsFromFile("rooms.txt");
+                LoadGuestsFromFile("guests.txt");
+                LoadRoomAvailabilityFromFile("room_availability.txt"); // Load room availability when the manager is created
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing hotel manager: {ex.Message}");
+            }
         }
 
         // Initialize rooms by loading from file
@@ -61,8 +69,16 @@ namespace HotelBookingSystem
 
         public List<Room> GetAvailableRooms()
         {
-            // Ensure this method only returns rooms that are available
-            return Rooms.Where(room => room.IsAvailable).ToList();
+            try
+            {
+                // Ensure this method only returns rooms that are available
+                return Rooms.Where(room => room.IsAvailable).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting available rooms: {ex.Message}");
+                return new List<Room>();
+            }
         }
 
         // Get guests from guests file
@@ -101,20 +117,38 @@ namespace HotelBookingSystem
         // Make booking
         public void MakeBooking(Booking booking)
         {
-            Bookings.Add(booking);
-            booking.Room.IsAvailable = false;  // Mark the room as unavailable
-            SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after making a new booking
+            try
+            {
+                Bookings.Add(booking);
+                booking.Room.IsAvailable = false;  // Mark the room as unavailable
+                SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after making a new booking
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error making booking: {ex.Message}");
+            }
         }
 
         // Cancel booking
         public void CancelBooking(int bookingId)
         {
-            var booking = Bookings.FirstOrDefault(b => b.BookingID == bookingId);
-            if (booking != null)
+            try
             {
-                Bookings.Remove(booking);
-                booking.Room.IsAvailable = true;  // Mark the room as available
-                SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after canceling a booking
+                var booking = Bookings.FirstOrDefault(b => b.BookingID == bookingId);
+                if (booking != null)
+                {
+                    Bookings.Remove(booking);
+                    booking.Room.IsAvailable = true;  // Mark the room as available
+                    SaveRoomAvailabilityToFile("room_availability.txt"); // Save room availability after canceling a booking
+                }
+                else
+                {
+                    Console.WriteLine("Booking not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error canceling booking: {ex.Message}");
             }
         }
 
@@ -171,53 +205,75 @@ namespace HotelBookingSystem
         // Add a new room
         public void AddRoom(int roomNumber, RoomType type, bool isAvailable, decimal price)
         {
-            if (Rooms.Any(r => r.RoomNumber == roomNumber))
+            try
             {
-                Console.WriteLine("Room with this number already exists.");
-                return;
-            }
+                if (Rooms.Any(r => r.RoomNumber == roomNumber))
+                {
+                    Console.WriteLine("Room with this number already exists.");
+                    return;
+                }
 
-            var newRoom = new Room(roomNumber, type, isAvailable, price);
-            Rooms.Add(newRoom);
-            SaveRoomAvailabilityToFile("room_availability.txt");
-            Console.WriteLine($"Room {roomNumber} added successfully.");
+                var newRoom = new Room(roomNumber, type, isAvailable, price);
+                Rooms.Add(newRoom);
+                SaveRoomAvailabilityToFile("room_availability.txt");
+                Console.WriteLine($"Room {roomNumber} added successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding room: {ex.Message}");
+            }
         }
 
         // Remove an existing room
         public void RemoveRoom(int roomNumber)
         {
-            var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-            if (room == null)
+            try
             {
-                Console.WriteLine("Room not found.");
-                return;
-            }
+                var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                if (room == null)
+                {
+                    Console.WriteLine("Room not found.");
+                    return;
+                }
 
-            if (!room.IsAvailable)
+                if (!room.IsAvailable)
+                {
+                    Console.WriteLine("Cannot remove a room that is currently booked.");
+                    return;
+                }
+
+                Rooms.Remove(room);
+                SaveRoomAvailabilityToFile("room_availability.txt");
+                Console.WriteLine($"Room {roomNumber} removed successfully.");
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("Cannot remove a room that is currently booked.");
-                return;
+                Console.WriteLine($"Error removing room: {ex.Message}");
             }
-
-            Rooms.Remove(room);
-            SaveRoomAvailabilityToFile("room_availability.txt");
-            Console.WriteLine($"Room {roomNumber} removed successfully.");
         }
 
         // Update an existing room's type and price
         public void UpdateRoom(int roomNumber, RoomType newType, bool isAvailable, decimal price)
         {
-            var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-            if (room == null)
+            try
             {
-                Console.WriteLine("Room not found.");
-                return;
-            }
+                var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                if (room == null)
+                {
+                    Console.WriteLine("Room not found.");
+                    return;
+                }
 
-            var updatedRoom = new Room(room.RoomNumber, newType, room.IsAvailable, room.Price);
-            Rooms[Rooms.IndexOf(room)] = updatedRoom;
-            SaveRoomAvailabilityToFile("room_availability.txt");
-            Console.WriteLine($"Room {roomNumber} updated successfully.");
+                room.Type = newType;
+                room.IsAvailable = isAvailable;
+                room.Price = price;
+                SaveRoomAvailabilityToFile("room_availability.txt");
+                Console.WriteLine($"Room {roomNumber} updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating room: {ex.Message}");
+            }
         }
     }
 }

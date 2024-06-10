@@ -35,14 +35,21 @@ namespace HotelBookingSystem
         /// </summary>
         public decimal CalculateTotalPrice()
         {
-            if (Room == null)
-                throw new InvalidOperationException("Room object is null.");
+            try
+            {
+                if (Room == null)
+                    throw new InvalidOperationException("Room object is null.");
 
-            int stayDuration = GetStayDuration();
-            if (stayDuration <= 0)
-                throw new InvalidOperationException("Invalid stay duration.");
+                int stayDuration = GetStayDuration();
+                if (stayDuration <= 0)
+                    throw new InvalidOperationException("Invalid stay duration.");
 
-            return Room.Price * stayDuration;
+                return Room.Price * stayDuration;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error calculating total price: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -50,41 +57,54 @@ namespace HotelBookingSystem
         /// </summary>
         private int GetStayDuration()
         {
-            if (CheckOutDate < CheckInDate)
-                throw new InvalidOperationException("Check-out date cannot be before check-in date.");
+            try
+            {
+                if (CheckOutDate < CheckInDate)
+                    throw new InvalidOperationException("Check-out date cannot be before check-in date.");
 
-            return (CheckOutDate - CheckInDate).Days;
+                return (CheckOutDate - CheckInDate).Days;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error calculating stay duration: " + ex.Message);
+            }
         }
 
         public override string ToString()
         {
-            return $"{BookingID}|{Room.RoomNumber}|{Guest.GuestID}|{CheckInDate:yyyy-MM-dd}|{CheckOutDate:yyyy-MM-dd}|{Guest.Name}|{Room.Price}";
+            return $"{BookingID}|{Room.RoomNumber}|{Guest.GuestID}|{CheckInDate:yyyy-MM-dd}|{CheckOutDate:yyyy-MM-dd}|{GuestName}|{RoomPrice}";
         }
 
         public static Booking FromString(string bookingString, List<Room> rooms, List<Guest> guests)
         {
-            var parts = bookingString.Split('|');
-            if (parts.Length == 7)
+            try
             {
-                int bookingID = int.Parse(parts[0]);
-                int roomNumber = int.Parse(parts[1]);
-                int guestID = int.Parse(parts[2]);
-                DateTime checkInDate = DateTime.Parse(parts[3]);
-                DateTime checkOutDate = DateTime.Parse(parts[4]);
-                string guestName = parts[5];
-                decimal roomPrice = decimal.Parse(parts[6]);
-
-                var room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-                var guest = guests.FirstOrDefault(g => g.GuestID == guestID);
-
-                if (room != null && guest != null)
+                var parts = bookingString.Split('|');
+                if (parts.Length == 7)
                 {
-                    return new Booking(bookingID, room, guest, checkInDate, checkOutDate, guestName, roomPrice);
-                }
-            }
-            return null;
-        }
+                    int bookingID = int.Parse(parts[0]);
+                    int roomNumber = int.Parse(parts[1]);
+                    int guestID = int.Parse(parts[2]);
+                    DateTime checkInDate = DateTime.Parse(parts[3]);
+                    DateTime checkOutDate = DateTime.Parse(parts[4]);
+                    string guestName = parts[5];
+                    decimal roomPrice = decimal.Parse(parts[6]);
 
+                    var room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+                    var guest = guests.FirstOrDefault(g => g.GuestID == guestID);
+
+                    if (room != null && guest != null)
+                    {
+                        return new Booking(bookingID, room, guest, checkInDate, checkOutDate, guestName, roomPrice);
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error parsing booking from string: " + ex.Message);
+            }
+        }
 
         /// <summary>
         /// Saves the list of bookings to a file.
@@ -99,6 +119,10 @@ namespace HotelBookingSystem
             catch (IOException ex)
             {
                 throw new IOException($"Error occurred while saving bookings to file: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unexpected error occurred while saving bookings to file: {ex.Message}");
             }
         }
 
@@ -127,6 +151,10 @@ namespace HotelBookingSystem
             catch (IOException ex)
             {
                 throw new IOException($"Error occurred while loading bookings from file: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unexpected error occurred while loading bookings from file: {ex.Message}");
             }
 
             return bookings;

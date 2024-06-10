@@ -13,11 +13,18 @@ namespace HotelBookingSystem
         {
             InitializeComponent();
             hotelManager = manager;
-            LoadGuests();
-            LoadAvailableRooms();
-            UpdateBookingList();
-            SetDefaultDates(); // Set default check-in and check-out dates to the same day
-            LoadBookingsFromFile();
+            try
+            {
+                LoadGuests();
+                LoadAvailableRooms();
+                UpdateBookingList();
+                SetDefaultDates(); // Set default check-in and check-out dates to the same day
+                LoadBookingsFromFile();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing booking form: " + ex.Message);
+            }
 
             // Subscribe to the SelectedIndexChanged event of cmbGuest
             cmbGuest.SelectedIndexChanged += cmbGuest_SelectedIndexChanged;
@@ -78,7 +85,7 @@ namespace HotelBookingSystem
                 foreach (var room in hotelManager.GetAvailableRooms())
                 {
                     // Add room number and type and price to the combo box
-                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.Type} - {room.Price:C}");                    
+                    cmbRoom.Items.Add($"{room.RoomNumber} - {room.Type} - {room.Price:C}");
                 }
             }
             catch (Exception ex)
@@ -89,25 +96,32 @@ namespace HotelBookingSystem
 
         private void CalculatePrice()
         {
-            if (cmbRoom.SelectedItem != null)
+            try
             {
-                var selectedRoom = cmbRoom.SelectedItem.ToString();
-                int roomNumber = int.Parse(selectedRoom.Split(' ')[0]);
-                var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
-
-                if (room != null)
+                if (cmbRoom.SelectedItem != null)
                 {
-                    int nights = (dtpCheckOutDate.Value - dtpCheckInDate.Value).Days;
-                    if (nights > 0) // Ensure the number of nights is positive
+                    var selectedRoom = cmbRoom.SelectedItem.ToString();
+                    int roomNumber = int.Parse(selectedRoom.Split(' ')[0]);
+                    var room = hotelManager.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+
+                    if (room != null)
                     {
-                        decimal totalPrice = room.Price * nights;
-                        lblMoney.Text = $"Total amount to pay: {totalPrice}$";
-                    }
-                    else
-                    {
-                        lblMoney.Text = "Please select valid duration to show the total cost!";
+                        int nights = (dtpCheckOutDate.Value - dtpCheckInDate.Value).Days;
+                        if (nights > 0) // Ensure the number of nights is positive
+                        {
+                            decimal totalPrice = room.Price * nights;
+                            lblMoney.Text = $"Total amount to pay: {totalPrice}$";
+                        }
+                        else
+                        {
+                            lblMoney.Text = "Please select valid duration to show the total cost!";
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error calculating price: " + ex.Message);
             }
         }
 
@@ -139,8 +153,7 @@ namespace HotelBookingSystem
                         SaveBookingsToFile();
                         MessageBox.Show("Booking successfully made!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ClearFields(); // Clear the fields after booking
-                        //UpdateBookingList(); // Update the booking list again after saving to file
-
+                        LoadAvailableRooms(); // Update available rooms after making a booking
                     }
                     else
                     {
@@ -156,7 +169,6 @@ namespace HotelBookingSystem
             {
                 MessageBox.Show("Error making booking: " + ex.Message);
             }
-            LoadAvailableRooms();
         }
 
         private void btnDeleteBooking_Click(object sender, EventArgs e)
@@ -166,7 +178,7 @@ namespace HotelBookingSystem
                 if (lstBookings.SelectedItem != null)
                 {
                     //get the booking ID from the selected item
-                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split('\t')[0]); 
+                    int bookingID = int.Parse(lstBookings.SelectedItem.ToString().Split('\t')[0]);
                     hotelManager.CancelBooking(bookingID);
                     UpdateBookingList();
                     SaveBookingsToFile();
@@ -174,7 +186,7 @@ namespace HotelBookingSystem
                 }
                 else
                 {
-                    MessageBox.Show("Please select a booking to Delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a booking to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -268,63 +280,102 @@ namespace HotelBookingSystem
                 MessageBox.Show("Error saving bookings to file: " + ex.Message);
             }
         }
+
         private void ClearFields()
         {
-            cmbGuest.SelectedIndex = -1;
-            cmbRoom.SelectedIndex = -1;
-            dtpCheckInDate.Value = DateTime.Today;
-            dtpCheckOutDate.Value = DateTime.Today;
-            lblMoney.Text = "Total amount to pay: ";
-            btnName.Text = "Guest Name";
-
+            try
+            {
+                cmbGuest.SelectedIndex = -1;
+                cmbRoom.SelectedIndex = -1;
+                dtpCheckInDate.Value = DateTime.Today;
+                dtpCheckOutDate.Value = DateTime.Today;
+                lblMoney.Text = "Total amount to pay: ";
+                btnName.Text = "Guest Name";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error clearing fields: " + ex.Message);
+            }
         }
+
         private void dtpCheckInDate_ValueChanged(object sender, EventArgs e)
         {
-            CalculatePrice();
+            try
+            {
+                CalculatePrice();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on check-in date change: " + ex.Message);
+            }
         }
 
         private void dtpCheckOutDate_ValueChanged(object sender, EventArgs e)
         {
-            CalculatePrice();
+            try
+            {
+                CalculatePrice();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on check-out date change: " + ex.Message);
+            }
         }
 
         private void cmbRoom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbRoom.SelectedItem != null)
+            try
             {
-                CalculatePrice();
+                if (cmbRoom.SelectedItem != null)
+                {
+                    CalculatePrice();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on room selection change: " + ex.Message);
             }
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-
         }
 
         private void SetDefaultDates()
         {
-            dtpCheckInDate.Value = DateTime.Today;
-            dtpCheckOutDate.Value = DateTime.Today; 
+            try
+            {
+                dtpCheckInDate.Value = DateTime.Today;
+                dtpCheckOutDate.Value = DateTime.Today;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error setting default dates: " + ex.Message);
+            }
         }
 
         private void BookingForm_Load(object sender, EventArgs e)
         {
-
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ClearFields();
+            try
+            {
+                ClearFields();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error cancelling booking: " + ex.Message);
+            }
         }
     }
 }

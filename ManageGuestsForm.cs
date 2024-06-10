@@ -27,7 +27,7 @@ namespace HotelBookingSystem
                     string.IsNullOrWhiteSpace(txtEmail.Text) ||
                     string.IsNullOrWhiteSpace(txtPhone.Text))
                 {
-                    MessageBox.Show("Please fill in all fields.");
+                    MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -42,20 +42,33 @@ namespace HotelBookingSystem
                 lstGuests.Items.Add(guest);
                 ClearGuestInputFields();
                 SaveGuestsToFile();
+                MessageBox.Show("Guest added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error adding guest: {ex.Message}");
+                MessageBox.Show($"Error adding guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnRemoveGuest_Click(object sender, EventArgs e)
         {
-            if (lstGuests.SelectedItem is Guest selectedGuest)
+            try
             {
-                hotelManager.Guests.Remove(selectedGuest);
-                lstGuests.Items.Remove(selectedGuest);
-                SaveGuestsToFile();
+                if (lstGuests.SelectedItem is Guest selectedGuest)
+                {
+                    hotelManager.Guests.Remove(selectedGuest);
+                    lstGuests.Items.Remove(selectedGuest);
+                    SaveGuestsToFile();
+                    MessageBox.Show("Guest removed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a guest to remove.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error removing guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -71,28 +84,40 @@ namespace HotelBookingSystem
                     lstGuests.Items[lstGuests.SelectedIndex] = selectedGuest; // Refresh the listbox
                     ClearGuestInputFields();
                     SaveGuestsToFile();
+                    MessageBox.Show("Guest updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a guest to update.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating guest: {ex.Message}");
+                MessageBox.Show($"Error updating guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void lstGuests_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstGuests.SelectedItem is Guest selectedGuest)
+            try
             {
-                txtName.Text = selectedGuest.GetName();
-                txtPhone.Text = selectedGuest.GetPhone();
-                txtEmail.Text = selectedGuest.GetEmail();
-                btnUpdateGuest.Enabled = true;
-                btnRemoveGuest.Enabled = true;
+                if (lstGuests.SelectedItem is Guest selectedGuest)
+                {
+                    txtName.Text = selectedGuest.GetName();
+                    txtPhone.Text = selectedGuest.GetPhone();
+                    txtEmail.Text = selectedGuest.GetEmail();
+                    btnUpdateGuest.Enabled = true;
+                    btnRemoveGuest.Enabled = true;
+                }
+                else
+                {
+                    btnUpdateGuest.Enabled = false;
+                    btnRemoveGuest.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                btnUpdateGuest.Enabled = false;
-                btnRemoveGuest.Enabled = false;
+                MessageBox.Show($"Error selecting guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -114,11 +139,11 @@ namespace HotelBookingSystem
                         writer.WriteLine($"{guest.GuestID}|{guest.GetName()}|{guest.GetPhone()}|{guest.GetEmail()}");
                     }
                 }
-                MessageBox.Show("Guests saved successfully.");
+                MessageBox.Show("Guests saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
-                MessageBox.Show($"Error saving guests to file: {ex.Message}");
+                MessageBox.Show($"Error saving guests to file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -144,16 +169,20 @@ namespace HotelBookingSystem
                             }
                         }
                     }
-                    MessageBox.Show("Guests loaded successfully.");
+                    MessageBox.Show("Guests loaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("No existing guests file found.");
+                    MessageBox.Show("No existing guests file found.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"Error loading guests from file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading guests from file: {ex.Message}");
+                MessageBox.Show($"Error loading guests: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -25,19 +25,19 @@ namespace HotelBookingSystem
                     cmbRoomType.SelectedItem == null ||
                     string.IsNullOrWhiteSpace(txtPrice.Text))
                 {
-                    MessageBox.Show("Please fill in all fields.");
+                    MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 if (!int.TryParse(txtRoomNumber.Text, out int roomNumber))
                 {
-                    MessageBox.Show("Please enter a valid room number.");
+                    MessageBox.Show("Please enter a valid room number.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 if (!decimal.TryParse(txtPrice.Text, out decimal price))
                 {
-                    MessageBox.Show("Please enter a valid price.");
+                    MessageBox.Show("Please enter a valid price.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -52,20 +52,33 @@ namespace HotelBookingSystem
                 lstRooms.Items.Add(room);
                 ClearRoomInputFields();
                 SaveRoomsToFile();
+                MessageBox.Show("Room added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error adding room: {ex.Message}");
+                MessageBox.Show($"Error adding room: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnRemoveRoom_Click(object sender, EventArgs e)
         {
-            if (lstRooms.SelectedItem is Room selectedRoom)
+            try
             {
-                hotelManager.RemoveRoom(selectedRoom.RoomNumber);
-                lstRooms.Items.Remove(selectedRoom);
-                SaveRoomsToFile();
+                if (lstRooms.SelectedItem is Room selectedRoom)
+                {
+                    hotelManager.RemoveRoom(selectedRoom.RoomNumber);
+                    lstRooms.Items.Remove(selectedRoom);
+                    SaveRoomsToFile();
+                    MessageBox.Show("Room removed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a room to remove.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error removing room: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -79,13 +92,13 @@ namespace HotelBookingSystem
                 {
                     if (!int.TryParse(txtRoomNumber.Text, out int roomNumber))
                     {
-                        MessageBox.Show("Please enter a valid room number.");
+                        MessageBox.Show("Please enter a valid room number.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
                     if (!decimal.TryParse(txtPrice.Text, out decimal price))
                     {
-                        MessageBox.Show("Please enter a valid price.");
+                        MessageBox.Show("Please enter a valid price.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -100,29 +113,41 @@ namespace HotelBookingSystem
                     lstRooms.Items[lstRooms.SelectedIndex] = selectedRoom; // Refresh the listbox
                     ClearRoomInputFields();
                     SaveRoomsToFile();
+                    MessageBox.Show("Room updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a room and ensure all fields are filled.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating room: {ex.Message}");
+                MessageBox.Show($"Error updating room: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void lstRooms_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstRooms.SelectedItem is Room selectedRoom)
+            try
             {
-                txtRoomNumber.Text = selectedRoom.RoomNumber.ToString();
-                cmbRoomType.SelectedItem = selectedRoom.Type;
-                chkIsAvailable.Checked = selectedRoom.IsAvailable;
-                txtPrice.Text = selectedRoom.Price.ToString();
-                btnUpdateRoom.Enabled = true;
-                btnRemoveRoom.Enabled = true;
+                if (lstRooms.SelectedItem is Room selectedRoom)
+                {
+                    txtRoomNumber.Text = selectedRoom.RoomNumber.ToString();
+                    cmbRoomType.SelectedItem = selectedRoom.Type;
+                    chkIsAvailable.Checked = selectedRoom.IsAvailable;
+                    txtPrice.Text = selectedRoom.Price.ToString();
+                    btnUpdateRoom.Enabled = true;
+                    btnRemoveRoom.Enabled = true;
+                }
+                else
+                {
+                    btnUpdateRoom.Enabled = false;
+                    btnRemoveRoom.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                btnUpdateRoom.Enabled = false;
-                btnRemoveRoom.Enabled = false;
+                MessageBox.Show($"Error selecting room: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -145,11 +170,10 @@ namespace HotelBookingSystem
                         writer.WriteLine($"{room.RoomNumber}|{room.Type}|{room.IsAvailable}|{room.Price}");
                     }
                 }
-                MessageBox.Show("Rooms saved successfully.");
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
-                MessageBox.Show($"Error saving rooms to file: {ex.Message}");
+                MessageBox.Show($"Error saving rooms to file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -176,20 +200,26 @@ namespace HotelBookingSystem
 
                                 var room = new Room(roomNumber, roomType, isAvailable, price);
                                 hotelManager.Rooms.Add(room);
-                                lstRooms.Items.Add(room);
+                                //lstRooms.Items.Add(room);
+                                 // Add formatted string to the list box
+                        string formattedRoom = $"{roomNumber,-5} {roomType,-10} {(isAvailable ? "Available" : "Not Available"),-15} ${price,6}";
+                        lstRooms.Items.Add(formattedRoom);
                             }
                         }
                     }
-                    MessageBox.Show("Rooms loaded successfully.");
                 }
                 else
                 {
-                    MessageBox.Show("No existing rooms file found.");
+                    MessageBox.Show("No existing rooms file found.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"Error loading rooms from file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading rooms from file: {ex.Message}");
+                MessageBox.Show($"Error loading rooms: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
