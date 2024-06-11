@@ -176,7 +176,7 @@ namespace HotelBookingSystem
                         writer.WriteLine($"{guest.GuestID}|{guest.GetName()}|{guest.GetPhone()}|{guest.GetEmail()}");
                     }
                 }
-                MessageBox.Show("Guests saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Guests saved successfully in the guests file.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {
