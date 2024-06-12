@@ -78,6 +78,7 @@ namespace HotelBookingSystem
                     hotelManager.Guests.Remove(selectedGuest);
                     lstGuests.Items.Remove(selectedGuest);
                     SaveGuestsToFile();
+                    ClearGuestInputFields();
                     MessageBox.Show("Guest removed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else

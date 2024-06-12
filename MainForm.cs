@@ -16,6 +16,7 @@ namespace HotelBookingSystem
     public partial class MainForm : Form
     {
         private HotelManager hotelManager;
+        private const string HotelDescription = "Welcome to our hotel booking system!";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -24,6 +25,7 @@ namespace HotelBookingSystem
         {
             InitializeComponent();
             hotelManager = new HotelManager();
+            lblHotelDescripion.Text = HotelDescription;
         }
 
         /// <summary>
@@ -81,6 +83,11 @@ namespace HotelBookingSystem
             {
                 MessageBox.Show("Error opening manage rooms form: " + ex.Message);
             }
+        }
+
+        private void btnUpdateDescription_Click(object sender, EventArgs e)
+        {
+            lblHotelDescripion.Text = "This is a new description!";
         }
     }
 }
