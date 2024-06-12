@@ -31,6 +31,7 @@ namespace HotelBookingSystem
         }
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BookingForm));
             this.cmbRoom = new System.Windows.Forms.ComboBox();
             this.cmbGuest = new System.Windows.Forms.ComboBox();
             this.dtpCheckInDate = new System.Windows.Forms.DateTimePicker();
@@ -43,11 +44,11 @@ namespace HotelBookingSystem
             this.button3 = new System.Windows.Forms.Button();
             this.btnName = new System.Windows.Forms.Button();
             this.groupBoxGuest = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblMoney = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -171,6 +172,17 @@ namespace HotelBookingSystem
             this.groupBoxGuest.TabStop = false;
             this.groupBoxGuest.Text = "Choose from guests list or go back and register the guest if not found";
             // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Location = new System.Drawing.Point(46, 28);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(110, 32);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Guests list";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnCancel);
@@ -224,17 +236,6 @@ namespace HotelBookingSystem
             this.label1.TabIndex = 14;
             this.label1.Text = "Bookings List";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Location = new System.Drawing.Point(46, 28);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(110, 32);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Guests list";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
@@ -336,8 +337,9 @@ namespace HotelBookingSystem
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "BookingForm";
-            this.Text = "Booking";
+            this.Text = "Bookings Management";
             this.groupBoxGuest.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

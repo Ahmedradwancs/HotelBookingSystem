@@ -31,6 +31,7 @@ namespace HotelBookingSystem
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageRoomsForm));
             this.txtRoomNumber = new System.Windows.Forms.TextBox();
             this.cmbRoomType = new System.Windows.Forms.ComboBox();
             this.chkIsAvailable = new System.Windows.Forms.CheckBox();
@@ -116,7 +117,7 @@ namespace HotelBookingSystem
             // 
             // btnRemoveRoom
             // 
-            this.btnRemoveRoom.Location = new System.Drawing.Point(267, 96);
+            this.btnRemoveRoom.Location = new System.Drawing.Point(272, 79);
             this.btnRemoveRoom.Name = "btnRemoveRoom";
             this.btnRemoveRoom.Size = new System.Drawing.Size(83, 34);
             this.btnRemoveRoom.TabIndex = 6;
@@ -126,7 +127,7 @@ namespace HotelBookingSystem
             // 
             // btnUpdateRoom
             // 
-            this.btnUpdateRoom.Location = new System.Drawing.Point(267, 148);
+            this.btnUpdateRoom.Location = new System.Drawing.Point(272, 131);
             this.btnUpdateRoom.Name = "btnUpdateRoom";
             this.btnUpdateRoom.Size = new System.Drawing.Size(83, 34);
             this.btnUpdateRoom.TabIndex = 7;
@@ -233,7 +234,7 @@ namespace HotelBookingSystem
             // 
             // ManageRoomsForm
             // 
-            this.ClientSize = new System.Drawing.Size(434, 470);
+            this.ClientSize = new System.Drawing.Size(416, 470);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lblPrice);
             this.Controls.Add(this.lblIsAvailable);
@@ -244,6 +245,7 @@ namespace HotelBookingSystem
             this.Controls.Add(this.chkIsAvailable);
             this.Controls.Add(this.cmbRoomType);
             this.Controls.Add(this.txtRoomNumber);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ManageRoomsForm";
             this.Text = "Manage Rooms";
             this.groupBox1.ResumeLayout(false);

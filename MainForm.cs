@@ -16,7 +16,6 @@ namespace HotelBookingSystem
     public partial class MainForm : Form
     {
         private HotelManager hotelManager;
-        private const string HotelDescription = "Welcome to our hotel booking system!";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -25,8 +24,65 @@ namespace HotelBookingSystem
         {
             InitializeComponent();
             hotelManager = new HotelManager();
-            lblHotelDescripion.Text = HotelDescription;
+            label5.Text = hotelManager.GetTotalRooms().ToString();
+
         }
+
+        /// <summary>
+        /// Updates the hotel details on the form.
+        /// </summary>
+        private void UpdateHotelDetails()
+        {
+            lblHotelName.Text = hotelManager.HotelName;
+            lblHotelLocation.Text = hotelManager.HotelLocation;
+        }
+
+
+        /// <summary>
+        /// Sets the name of the hotel.
+        /// </summary>
+        /// <param name="name">The new name of the hotel.</param>
+        public void SetHotelName(string name)
+        {
+            hotelManager.HotelName = name;
+            lblHotelName.Text = name;
+        }
+
+        /// <summary>
+        /// Sets the location of the hotel.
+        /// </summary>
+        /// <param name="location">The new location of the hotel.</param>
+        public void SetHotelLocation(string location)
+        {
+            hotelManager.HotelLocation = location;
+            lblHotelLocation.Text = location;
+        }
+
+        /// <summary>
+        /// Event handler for the click event of the 'Update Details' button.
+        /// Displays a form for updating hotel details and handles exceptions that may occur.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">An EventArgs that contains the event data.</param>
+        private void btnUpdateDetails_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var updateForm = new UpdateHotelDetailsForm(hotelManager))
+                {
+                    if (updateForm.ShowDialog() == DialogResult.OK)
+                    {
+                        UpdateHotelDetails();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as needed.
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         /// <summary>
         /// Handles the click event for the Manage Guests button.
@@ -85,9 +141,5 @@ namespace HotelBookingSystem
             }
         }
 
-        private void btnUpdateDescription_Click(object sender, EventArgs e)
-        {
-            lblHotelDescripion.Text = "This is a new description!";
-        }
     }
 }

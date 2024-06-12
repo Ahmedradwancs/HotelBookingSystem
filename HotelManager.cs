@@ -25,6 +25,8 @@ namespace HotelBookingSystem
         /// </summary>
         public List<Booking> Bookings { get; private set; }
 
+        public string HotelName { get; set; }
+        public string HotelLocation { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="HotelManager"/> class.
         /// </summary>
@@ -330,5 +332,15 @@ namespace HotelBookingSystem
                 Console.WriteLine($"Error updating room: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Gets the total number of rooms in the hotel.
+        /// </summary>
+        /// <returns></returns>
+        public int GetTotalRooms()
+        {
+            return Rooms.Count;
+        }
+
     }
 }

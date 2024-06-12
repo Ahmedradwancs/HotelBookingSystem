@@ -76,6 +76,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="UpdateHotelDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateHotelDetailsForm.Designer.cs">
+      <DependentUpon>UpdateHotelDetailsForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BookingForm.resx">
       <DependentUpon>BookingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,6 +103,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UpdateHotelDetailsForm.resx">
+      <DependentUpon>UpdateHotelDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
